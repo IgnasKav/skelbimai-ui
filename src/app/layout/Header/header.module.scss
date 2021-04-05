@@ -1,7 +1,26 @@
 .header {
+    display: flex;
     height: 50px;
     position: sticky;
     top: 0;
     background-color: #fff;
     box-shadow: rgba(0, 0, 0, 0.08) 0px 1px 12px;
+    padding: 0 50px;
+
+    .title {
+        margin: auto 0;
+    }
+    .spacer {
+        flex: 1;
+    }
+    .addButton {
+        display: flex;
+
+        button {
+            margin: auto;
+            text-transform: none;
+            height: 40px;
+            border-radius: 10px;
+        }
+    }
 }
