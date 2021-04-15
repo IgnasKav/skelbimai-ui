@@ -1,74 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect} from 'react';
 import './styles.css';
-import { Advertisement } from 'app/models/Advertisement';
 import AdvertisementDashboard from 'app/features/advertisements/advertisement-dashboard';
 import Header from './Header/header';
-import agent from 'app/api/agent';
 import LoadingComponent from "./loadingComponent";
-import {v4 as uuid} from 'uuid';
+import {observer} from "mobx-react-lite";
+import {useStore} from 'app/stores/store';
 
 function App() {
-  const [advertisements, setAdvertisements] = useState<Advertisement[]>([]);
-  const [selectedAdvertisement, setSelectedAdvertisement] = useState<Advertisement | undefined>(undefined);
-  const [editMode, setEditMode] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
+    const {advertisementStore} = useStore();
 
-  useEffect(() => {
-    agent.Advertisements.list().then(response => {
-      setAdvertisements(response);
-      setLoading(false);
-    });
-  }, [])
+    useEffect(() => {
+        advertisementStore.loadAdvertisements();
+    }, [advertisementStore])
 
-  const handleAddSelect = (id: string) => {
-    setSelectedAdvertisement(advertisements.find(advertisement => advertisement.id === id));
-  }
+    if (advertisementStore.loading) return <LoadingComponent content={'Loading app'}/>
 
-  const handleAddClose = () => setSelectedAdvertisement(undefined);
-
-  const handleFormOpen = (id?: string) => {
-    id ? handleAddSelect(id) : setSelectedAdvertisement({id: 'new'} as Advertisement);
-    setEditMode(true);
-  }
-
-  const handleFormClose = () => {
-    setSelectedAdvertisement(undefined);
-    setEditMode(false);
-  }
-
-  const handleCreateOrEditAdvertisement = (advertisement: Advertisement) => {
-    console.log(advertisement);
-    const resetState = () => {
-      setSubmitting(false);
-      setEditMode(false);
-      setSelectedAdvertisement(advertisement);
-    }
-
-    setSubmitting(true);
-
-    if(advertisement.id === 'new') {
-      advertisement.id = uuid();
-      agent.Advertisements.create(advertisement).then(() => {
-        setAdvertisements([...advertisements, advertisement]);
-        resetState();
-      });
-    } else {
-      agent.Advertisements.edit(advertisement).then(() => {
-        setAdvertisements([...advertisements.filter(x => x.id !== advertisement.id), advertisement]);
-        resetState();
-      });
-    }
-  }
-
-  if(loading) return <LoadingComponent content={'Loading app'}/>
-
-  return (
-    <>
-      <Header switchCreateAdvertisementState={handleFormOpen}/>
-      <AdvertisementDashboard advertisements={advertisements} submitting={submitting} onCreateOrEdit={handleCreateOrEditAdvertisement} selectedAdvertisement={selectedAdvertisement} setSelectedAdvertisement={setSelectedAdvertisement} handleSelectedAdvertisement={handleAddSelect} handleCancelSelectedAdvertisement={handleAddClose} editMode={editMode} onFormClose={handleFormClose}/>
-    </>
-  );
+    return (
+        <>
+            <Header/>
+            <AdvertisementDashboard/>
+        </>
+    );
 }
 
-export default App;
+export default observer(App);

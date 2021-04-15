@@ -1,17 +1,14 @@
 import React from 'react';
-import { Advertisement } from 'app/models/Advertisement';
 import css from './advertisement-list.module.scss';
+import {useStore} from "app/stores/store";
 
-interface Props {
-    advertisements: Advertisement[];
-    onAddSelect: (id: string) => void;
-}
-
-export default function AdvertisementList({ advertisements, onAddSelect }: Props) {
+export default function AdvertisementList() {
+    const {advertisementStore} = useStore();
+    const {selectAdvertisement, advertisements} = advertisementStore;
     return (
         <>
             {advertisements.map(advertisement => (
-                <div className={css.item} onClick={() => onAddSelect(advertisement.id)}>
+                <div key={advertisement.id} className={css.item} onClick={() => selectAdvertisement(advertisement.id)}>
                     <div className={css.left}>
                     </div>
                     <div className={css.right}>

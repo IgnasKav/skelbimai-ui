@@ -1,22 +1,47 @@
-import React from 'react';
-import { Advertisement } from 'app/models/Advertisement';
+import React, {useState} from 'react';
 import CloseIcon from 'app/shared/icons/close-icon';
 import css from './advertisement-details.module.scss';
-import { HiOutlineGlobe, HiOutlineDocumentText, HiEye } from "react-icons/hi";
+import { HiOutlineGlobe, HiOutlineDocumentText, HiEye, HiOutlineCog } from "react-icons/hi";
+import {useStore} from "app/stores/store";
+import {IconButton, Menu, MenuItem} from "@material-ui/core";
+import {observer} from "mobx-react-lite";
 
-interface Props {
-    advertisement: Advertisement
-    onAddClose: () => void;
-    editMode: boolean;
-}
+export default observer(function AdvertisementDetails() {
+    const {advertisementStore} = useStore();
+    const {selectedAdvertisement:advertisement, editMode, deselectAdvertisement, deleteAdvertisement, openEditOrCreateForm} = advertisementStore;
 
-export default function AdvertisementDetails({ advertisement, onAddClose, editMode }: Props) {
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+    if(!advertisement) return <div>lol</div>;
+
     return (
         <>
             { !editMode &&
-                <div className={css.iconWrapper}>
-                    <CloseIcon onClick={onAddClose} />
-                </div>
+                <>
+                    <div className={css.optionButton}>
+                        <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>
+                        <Menu
+                            anchorEl={anchorEl}
+                            keepMounted
+                            open={Boolean(anchorEl)}
+                            onClose={handleClose}
+                        >
+                            <MenuItem onClick={() => openEditOrCreateForm(advertisement.id)}>Redaguoti</MenuItem>
+                            <MenuItem onClick={() => deleteAdvertisement(advertisement.id)}>Ištrinti</MenuItem>
+                        </Menu>
+                    </div>
+                    <div className={css.closeIconContainer}>
+                        <CloseIcon onClick={() => deselectAdvertisement()} />
+                    </div>
+                </>
             }
             <div className={css.title}>{advertisement.title}</div>
             <div className={css.info}>
@@ -58,4 +83,4 @@ export default function AdvertisementDetails({ advertisement, onAddClose, editMo
             <div>{advertisement.description}</div>
         </>
     )
-}
+})

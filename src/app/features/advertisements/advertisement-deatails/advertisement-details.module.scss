@@ -51,13 +51,23 @@
         }
     }
 }
-.iconWrapper {
+.closeIconContainer {
     position: absolute;
     display: inline-flex;
     color: #ABABAB;
     right: 15px;
     top: 15px;
     font-size: 40px;
+}
+.optionButton {
+    position: absolute;
+    right: 55px;
+    top: 10px;
+
+    button {
+        font-size: 35px;
+        padding: 6px;
+    }
 }
 .price {
     font-size: 30px;
