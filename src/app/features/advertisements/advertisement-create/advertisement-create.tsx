@@ -1,6 +1,6 @@
 import React from 'react';
 import css from './advertisement-create.module.scss';
-import CommonInput from "app/shared/inputs/common-input-field";
+import CommonInput from "app/shared/inputs/common-input/common-input-field";
 import {Button} from '@material-ui/core';
 import {useStore} from "app/stores/store";
 

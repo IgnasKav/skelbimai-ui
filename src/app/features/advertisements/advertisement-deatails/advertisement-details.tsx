@@ -56,7 +56,7 @@ export default observer(function AdvertisementDetails() {
                         <span className={css.separator}>&bull;</span>
                         <div className={css.group}>
                             <HiOutlineDocumentText />
-                            <span>{advertisement.category}</span>
+                            <span>{advertisement.category.name}</span>
                         </div>
                     </>
                 }
