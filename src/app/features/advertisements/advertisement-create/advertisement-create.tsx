@@ -5,7 +5,7 @@ import {Button} from '@material-ui/core';
 import {useStore} from "app/stores/store";
 
 export default function AdvertisementCreateWindow() {
-    const {advertisementStore} = useStore();
+    const {advertisementStore, categoryStore} = useStore();
     const {
         selectedAdvertisement: advertisement,
         setSelectedAdvertisement,
@@ -13,6 +13,7 @@ export default function AdvertisementCreateWindow() {
         createAdvertisement,
         updateAdvertisement
     } = advertisementStore;
+    const {categories} = categoryStore;
 
     if (!advertisement) return <div>lol</div>;
 
@@ -22,6 +23,8 @@ export default function AdvertisementCreateWindow() {
         const {name, value} = event.target;
         setSelectedAdvertisement({...advertisement, [name]: value});
     }
+
+    console.log(categories);
 
     return (
         <>

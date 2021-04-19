@@ -1,5 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 import {Advertisement} from "../models/Advertisement";
+import {Category} from "../models/Category";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -35,8 +36,13 @@ const Advertisements = {
     delete: (id: string) => requests.del(`/advertisements/${id}`)
 }
 
+const Categories = {
+    list: () => requests.get<Category[]>('/categories')
+}
+
 const agent = {
-    Advertisements: Advertisements
+    Advertisements: Advertisements,
+    Categories: Categories
 }
 
 export default agent;

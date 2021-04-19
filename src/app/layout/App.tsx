@@ -7,11 +7,12 @@ import {observer} from "mobx-react-lite";
 import {useStore} from 'app/stores/store';
 
 function App() {
-    const {advertisementStore} = useStore();
+    const {advertisementStore, categoryStore} = useStore();
 
     useEffect(() => {
         advertisementStore.loadAdvertisements();
-    }, [advertisementStore])
+        categoryStore.loadCategories();
+    }, [advertisementStore, categoryStore])
 
     if (advertisementStore.loading) return <LoadingComponent content={'Loading app'}/>
 
