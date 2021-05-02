@@ -1,71 +1,61 @@
 import {makeAutoObservable, runInAction} from "mobx";
-import {Advertisement} from "app/models/Advertisement";
+import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
 import agent from "app/api/agent";
 import {v4 as uuid} from "uuid";
 
 export default class AdvertisementStore {
     advertisements: Advertisement[] = [];
-    selectedAdvertisement: Advertisement | undefined = undefined;
-    editMode = false;
     loading = false;
+    loadingDetails = false;
 
     constructor() {
         makeAutoObservable(this)
     }
 
     loadAdvertisements = async () => {
-        this.setLoading(true);
+        this.loading = true;
         try {
             this.advertisements = await agent.Advertisements.list();
-            this.setLoading(false);
+            runInAction(() => {
+                this.loading = false;
+            });
         } catch (error) {
             console.log(error);
-            this.setLoading(false);
+            runInAction(() => {
+                this.loading = false;
+            });
         }
     }
 
-    setLoading = (state: boolean) => {
-        this.loading = state;
-    }
-
-    setSelectedAdvertisement = (advertisement: Advertisement) => {
-        this.selectedAdvertisement = advertisement;
-    }
-
-    selectAdvertisement = (id: string | undefined) => {
-        this.selectedAdvertisement = id === 'new' ? {id: 'new'} as Advertisement : this.advertisements.find(x => x.id === id);
-    }
-
-    deselectAdvertisement = () => {
-        this.selectedAdvertisement = undefined;
-    }
-
-    openEditOrCreateForm = (id?: string) => {
-        id ? this.selectAdvertisement(id) : this.selectAdvertisement('new');
-        this.editMode = true;
-    }
-
-    closeEditOrCreateForm = () => {
-        this.deselectAdvertisement();
-        this.editMode = false;
+    loadAdvertisement = async (id: string) => {
+        this.loadingDetails = true;
+        try {
+            const advertisement = await agent.Advertisements.details(id);
+            return runInAction(() => {
+                this.loadingDetails = false;
+                return advertisement;
+            })
+        } catch (error){
+            console.log(error);
+            runInAction(() => {
+                this.loadingDetails = false;
+            })
+        }
     }
 
     updateAdvertisement = async (updatedAdvertisement: Advertisement) => {
         this.loading = true;
 
         try {
-            await agent.Advertisements.edit(updatedAdvertisement);
+            const advertisementEntity = new AdvertisementEntity(updatedAdvertisement);
+            await agent.Advertisements.edit(advertisementEntity);
             runInAction(() => {
                 this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== updatedAdvertisement.id), updatedAdvertisement];
-                this.editMode = false;
-                this.selectAdvertisement(updatedAdvertisement.id)
                 this.loading = false;
             });
         } catch (error) {
             console.log(error);
             runInAction(() => {
-                this.editMode = false;
-                this.deselectAdvertisement();
                 this.loading = false;
             });
         }
@@ -76,19 +66,15 @@ export default class AdvertisementStore {
         newAdvertisement.id = uuid();
 
         try {
-            await agent.Advertisements.create(newAdvertisement);
+            const advertisementEntity = new AdvertisementEntity(newAdvertisement);
+            await agent.Advertisements.create(advertisementEntity);
             runInAction(() => {
                 this.advertisements.push(newAdvertisement);
-                this.editMode = false;
-                this.selectAdvertisement(newAdvertisement.id)
                 this.loading = false;
             });
-        }
-        catch (error){
+        } catch (error) {
             console.log(error);
             runInAction(() => {
-                this.editMode = false;
-                this.deselectAdvertisement();
                 this.loading = false;
             });
         }
@@ -99,13 +85,15 @@ export default class AdvertisementStore {
 
         try {
             await agent.Advertisements.delete(id);
-            this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== id)];
-            this.deselectAdvertisement();
-            this.loading = false;
-        }
-        catch (error) {
+            runInAction(() => {
+                this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== id)];
+                this.loading = false;
+            });
+        } catch (error) {
             console.log(error);
-            this.loading = false;
+            runInAction(() => {
+                this.loading = false;
+            });
         }
     }
 }

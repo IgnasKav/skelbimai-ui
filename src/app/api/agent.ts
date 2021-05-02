@@ -1,5 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
-import {Advertisement} from "../models/Advertisement";
+import {Advertisement, AdvertisementEntity} from "../models/Advertisement";
 import {Category} from "../models/Category";
 
 const sleep = (delay: number) => {
@@ -31,8 +31,8 @@ const requests = {
 const Advertisements = {
     list: () => requests.get<Advertisement[]>('/advertisements'),
     details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
-    create: (advertisement: Advertisement) => requests.post('/advertisements', advertisement),
-    edit: (advertisement: Advertisement) => requests.put(`/advertisements/${advertisement.id}`, advertisement),
+    create: (advertisement: AdvertisementEntity) => requests.post('/advertisements', advertisement),
+    edit: (advertisement: AdvertisementEntity) => requests.put(`/advertisements/${advertisement.id}`, advertisement),
     delete: (id: string) => requests.del(`/advertisements/${id}`)
 }
 

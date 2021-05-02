@@ -2,30 +2,27 @@ import React from 'react';
 import css from './advertisement-dashboard.module.scss';
 import AdvertisementList from './advertisement-list/advertisement-list';
 import AdvertisementDetails from './advertisement-deatails/advertisement-details';
-import AdvertisementCreateWindow from './advertisement-create/advertisement-create';
-import {useStore} from "app/stores/store";
 import {observer} from "mobx-react-lite";
+import {Route} from "react-router-dom";
+import {useStore} from "../../stores/store";
+import LoadingComponent from "../../layout/loadingComponent";
 
 export default observer(function AdvertisementDashboard() {
+
     const {advertisementStore} = useStore();
 
-    const {selectedAdvertisement, editMode} = advertisementStore;
+    if(advertisementStore.loading) return <LoadingComponent inverted={true} content="Kraunami skelbimai"/>
 
     return (
         <div className={css.dashboard}>
             <div className={css.list}>
-                {
-                    selectedAdvertisement && editMode ?
-                        <AdvertisementCreateWindow/>
-                        : <AdvertisementList/>
-                }
+                <AdvertisementList/>
             </div>
-            {
-                selectedAdvertisement &&
-                    <div className={css.details}>
-                        <AdvertisementDetails/>
-                    </div>
-            }
+            <Route path="/details/:advertisementId" >
+                <div className={css.details}>
+                    <AdvertisementDetails/>
+                </div>
+            </Route>
         </div>
     )
 })

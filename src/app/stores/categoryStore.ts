@@ -4,7 +4,9 @@ import agent from "app/api/agent";
 
 export default class CategoryStore {
     categories: Category[] = [];
+    selectedCategory: Category|undefined = undefined;
     loading = false;
+    editMode = false;
 
     constructor() {
         makeAutoObservable(this);
@@ -18,6 +20,14 @@ export default class CategoryStore {
         } catch (error) {
             console.log(error);
             this.setLoading(false);
+        }
+    }
+
+    selectCategory = (id: string) => {
+        if(this.selectedCategory && this.selectedCategory.id === id) {
+            this.selectedCategory = undefined;
+        } else {
+            this.selectedCategory = this.categories.find(c => c.id === id);
         }
     }
 
