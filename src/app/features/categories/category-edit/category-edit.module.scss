@@ -1,0 +1,11 @@
+.header h2 {
+  min-width: 330px;
+  display: flex;
+  align-items: center;
+
+  button {
+    position: absolute;
+    right: 4px;
+  }
+}
+

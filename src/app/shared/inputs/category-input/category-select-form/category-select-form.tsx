@@ -1,9 +1,8 @@
 import css from "../category-select-field.module.scss";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import CloseIcon from "app/shared/icons/close-icon";
 import {useStore} from "app/stores/store";
 import styled from 'styled-components';
-import {observer} from "mobx-react-lite";
 import {Button} from "@material-ui/core";
 import {Category} from "app/models/Category";
 
@@ -21,12 +20,18 @@ const CategoryChip = styled.div<any>(props => ({
 
 interface Props {
     close: () => void;
+    value ?: Category;
     submit: (selectedCategory: Category | undefined) => void;
 }
 
-export default observer(function CategorySelectForm({submit, close}: Props) {
+export default function CategorySelectForm({submit, close, value}: Props) {
+    const [selectedCategory, selectCategory] = useState<Category>(new Category());
     const {categoryStore} = useStore();
-    const {categories, selectedCategory, selectCategory} = categoryStore;
+    const {categories} = categoryStore;
+
+    useEffect(() => {
+        if(value) selectCategory(value);
+    }, [value]);
 
     return(
         <div className={css.selectContainerBackground}>
@@ -44,7 +49,7 @@ export default observer(function CategorySelectForm({submit, close}: Props) {
                             return (
                                 <CategoryChip key={category.id}
                                           selected={isCategorySelected}
-                                          onClick={ () => selectCategory(category.id)}
+                                          onClick={ () => selectCategory(category)}
                                 >
                                     {category.name}
                                 </CategoryChip>
@@ -58,4 +63,4 @@ export default observer(function CategorySelectForm({submit, close}: Props) {
             </div>
         </div>
     )
-})
+}

@@ -1,37 +1,46 @@
-import {makeAutoObservable} from "mobx";
+import {makeAutoObservable, runInAction} from "mobx";
 import {Category} from "app/models/Category";
 import agent from "app/api/agent";
+import {v4 as uuid} from "uuid";
 
 export default class CategoryStore {
     categories: Category[] = [];
-    selectedCategory: Category|undefined = undefined;
     loading = false;
-    editMode = false;
 
     constructor() {
         makeAutoObservable(this);
     }
 
     loadCategories = async () => {
-        this.setLoading(true);
+        this.loading = true;
         try {
             this.categories = await agent.Categories.list();
-            this.setLoading(false);
+            runInAction(() => {
+                this.loading = false;
+            })
         } catch (error) {
             console.log(error);
-            this.setLoading(false);
+            runInAction(() => {
+                this.loading = false;
+            })
         }
     }
 
-    selectCategory = (id: string) => {
-        if(this.selectedCategory && this.selectedCategory.id === id) {
-            this.selectedCategory = undefined;
-        } else {
-            this.selectedCategory = this.categories.find(c => c.id === id);
-        }
-    }
+    createCategory = async (newCategory: Category) => {
+        this.loading = true;
+        newCategory.id = uuid();
 
-    setLoading = (state: boolean) => {
-        this.loading = state;
+        try {
+            await agent.Categories.create(newCategory);
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
+        catch (error) {
+            console.log(error);
+            runInAction(() => {
+                this.loading = false;
+            })
+        }
     }
 }

@@ -1,0 +1,30 @@
+.dashboard {
+  margin: 20px;
+
+  .header {
+    display: flex;
+
+    .title {
+      font-size: 40px;
+      font-family: 'Roboto-Light';
+      margin-bottom: 20px;
+    }
+    button {
+      margin-left: 10px;
+      height: 45px;
+      width: 45px;
+      font-size: 20px;
+    }
+  }
+  .category {
+    display: flex;
+    font-size: 20px;
+
+    :first-child {
+      align-self: center;
+    }
+    button {
+      margin-left: 5px;
+    }
+  }
+}

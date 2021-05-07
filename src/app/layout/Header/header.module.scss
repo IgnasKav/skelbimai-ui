@@ -13,14 +13,11 @@
     .spacer {
         flex: 1;
     }
-    .addButton {
-        display: flex;
 
-        button {
-            margin: auto;
-            text-transform: none;
-            height: 40px;
-            border-radius: 10px;
-        }
+    button {
+        margin: auto;
+        text-transform: none;
+        height: 40px;
+        border-radius: 10px;
     }
 }

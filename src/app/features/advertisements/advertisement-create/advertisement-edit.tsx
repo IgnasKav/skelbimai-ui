@@ -33,6 +33,15 @@ export default observer(function AdvertisementEditPage() {
         setAdvertisement({...advertisement, [name]: value});
     }
 
+    const createOrEditAdvertisement = async () => {
+        if(isNew) {
+            await createAdvertisement(advertisement);
+        } else {
+            await updateAdvertisement(advertisement);
+        }
+        history.replace('/');
+    }
+
     //loading
     if (advertisementStore.loadingDetails) {
         return (
@@ -72,7 +81,7 @@ export default observer(function AdvertisementEditPage() {
                         Atšaukti
                     </Button>
                     <Button variant="outlined" color="primary"
-                            onClick={() => isNew ? createAdvertisement(advertisement) : updateAdvertisement(advertisement)}>
+                            onClick={() => createOrEditAdvertisement()}>
                         {isNew ? 'Sukurti' : 'Išsaugoti'}
                     </Button>
                 </div>

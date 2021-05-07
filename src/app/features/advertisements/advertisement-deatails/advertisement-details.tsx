@@ -13,7 +13,6 @@ export default observer(function AdvertisementDetails() {
     let history = useHistory();
     const {advertisementStore} = useStore();
     const {
-        deleteAdvertisement,
         loadAdvertisement
     } = advertisementStore;
 
@@ -23,6 +22,11 @@ export default observer(function AdvertisementDetails() {
     useEffect(() => {
         if (advertisementId) loadAdvertisement(advertisementId).then(response => setAdvertisement(response!));
     }, [advertisementId, loadAdvertisement]);
+
+    const deleteAdvertisement = async () => {
+        await advertisementStore.deleteAdvertisement(advertisement.id);
+        history.replace('/');
+    }
 
     //material ui
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -51,7 +55,7 @@ export default observer(function AdvertisementDetails() {
                     <MenuItem onClick={() => {
                         history.push(`/edit/${advertisement.id}`)
                     }}>Redaguoti</MenuItem>
-                    <MenuItem onClick={() => deleteAdvertisement(advertisement.id)}>Ištrinti</MenuItem>
+                    <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
                 </Menu>
             </div>
             <div className={css.closeIconContainer}>

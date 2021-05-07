@@ -8,7 +8,7 @@ interface Props {
     name: string;
     onChange: (event: any) => void;
     className?: string;
-    value: Category| undefined;
+    value?: Category;
 }
 
 export default function SelectInput({className, label, name, onChange, value}: Props) {
@@ -33,7 +33,7 @@ export default function SelectInput({className, label, name, onChange, value}: P
                      onClick={() => setSelectMode(true)}>
                     {value?.name}
                 </div>
-                {selectMode && <CategorySelectForm submit={closeSelect} close={() => setSelectMode(false)}/>}
+                {selectMode && <CategorySelectForm submit={closeSelect} value={value} close={() => setSelectMode(false)}/>}
             </div>
         </>
     )

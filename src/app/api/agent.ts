@@ -37,7 +37,9 @@ const Advertisements = {
 }
 
 const Categories = {
-    list: () => requests.get<Category[]>('/categories')
+    list: () => requests.get<Category[]>('/categories'),
+    create: (category: Category) => requests.post('/categories', category),
+    edit: (category: Category) => requests.put(`/categories/${category.id}`, category)
 }
 
 const agent = {
