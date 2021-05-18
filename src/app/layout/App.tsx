@@ -7,6 +7,7 @@ import {useStore} from 'app/stores/store';
 import {Route, Switch} from 'react-router-dom';
 import CategoriesDashboard from "app/features/categories/categories-dashboard";
 import AdvertisementEditPage from "app/features/advertisements/advertisement-create/advertisement-edit";
+import LoginForm from 'app/features/users/LoginForm';
 
 function App() {
     const {advertisementStore, categoryStore} = useStore();
@@ -23,6 +24,7 @@ function App() {
                 <Route path='/categoriesDashboard' component={CategoriesDashboard}/>
                 <Route path="/createAdvertisement" component={AdvertisementEditPage}/>
                 <Route path="/edit/:advertisementId" component={AdvertisementEditPage}/>
+                <Route path='/login' component={LoginForm}/>
                 <Route path='/' component={AdvertisementDashboard}/>
             </Switch>
         </>
