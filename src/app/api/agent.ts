@@ -1,4 +1,6 @@
+import { User, UserFormValues } from 'app/models/user';
 import axios, {AxiosResponse} from 'axios';
+import { request } from 'node:http';
 import {Advertisement, AdvertisementEntity} from "../models/Advertisement";
 import {Category} from "../models/Category";
 
@@ -41,10 +43,16 @@ const Categories = {
     create: (category: Category) => requests.post('/categories', category),
     edit: (category: Category) => requests.put(`/categories/${category.id}`, category)
 }
-
+const Account ={
+    current: () => requests.get<User>('/account'),
+    login:(user: UserFormValues) => requests.post<User>('/account/login',user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register',user)
+}
 const agent = {
     Advertisements: Advertisements,
-    Categories: Categories
+    Categories: Categories,
+    Account
 }
+
 
 export default agent;
