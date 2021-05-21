@@ -1,0 +1,13 @@
+.search {
+    display: flex;
+    flex-direction: column;
+    height: 50px;
+    .field{
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    .button{
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+}
