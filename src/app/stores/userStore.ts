@@ -4,6 +4,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { store } from "./store";
 
 export default class UserStore{
+    
     user: User | null = null;
     constructor(){
         makeAutoObservable(this)
