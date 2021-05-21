@@ -3,6 +3,7 @@ import './styles.css';
 import { Advertisement } from 'app/models/Advertisement';
 import AdvertisementDashboard from 'app/features/advertisements/advertisement-dashboard';
 import Header from './Header/header';
+<<<<<<< Updated upstream
 import agent from 'app/api/agent';
 import LoadingComponent from "./loadingComponent";
 import {v4 as uuid} from 'uuid';
@@ -69,6 +70,38 @@ function App() {
       <AdvertisementDashboard advertisements={advertisements} submitting={submitting} onCreateOrEdit={handleCreateOrEditAdvertisement} selectedAdvertisement={selectedAdvertisement} setSelectedAdvertisement={setSelectedAdvertisement} handleSelectedAdvertisement={handleAddSelect} handleCancelSelectedAdvertisement={handleAddClose} editMode={editMode} onFormClose={handleFormClose}/>
     </>
   );
+=======
+import Search from './Search/search';
+import {observer} from "mobx-react-lite";
+import {useStore} from 'app/stores/store';
+import {Route, Switch} from 'react-router-dom';
+import CategoriesDashboard from "app/features/categories/categories-dashboard";
+import AdvertisementEditPage from "app/features/advertisements/advertisement-create/advertisement-edit";
+import DashBoard from "app/features/dashboard/dashboard";
+import 'bootstrap/dist/css/bootstrap.min.css';
+
+function App() {
+    const {advertisementStore, categoryStore} = useStore();
+
+    useEffect(() => {
+        advertisementStore.loadAdvertisements();
+        categoryStore.loadCategories();
+    }, [advertisementStore, categoryStore])
+
+    return (
+        <>
+            <Header/>
+            <Search/>
+            <Switch>
+                <Route path='/dashboard' component={DashBoard}/>
+                <Route path='/categoriesDashboard' component={CategoriesDashboard}/>
+                <Route path="/createAdvertisement" component={AdvertisementEditPage}/>
+                <Route path="/edit/:advertisementId" component={AdvertisementEditPage}/>
+                <Route path='/' component={AdvertisementDashboard}/>
+            </Switch>
+        </>
+    );
+>>>>>>> Stashed changes
 }
 
 export default App;
