@@ -7,15 +7,27 @@ export default class AdvertisementStore {
     advertisements: Advertisement[] = [];
     loading = false;
     loadingDetails = false;
+    searching = false;
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    loadAdvertisements = async () => {
+    loadAdvertisements = async (name: string = "") => {
         this.loading = true;
         try {
-            this.advertisements = await agent.Advertisements.list();
+            if(name.length == 0)
+            {
+                this.searching = false;
+            }
+            if(this.searching)
+            {
+                this.advertisements = await agent.Advertisements.list();
+            }
+            else
+            {
+                this.advertisements = await agent.Advertisements.list();
+            }
             runInAction(() => {
                 this.loading = false;
             });
@@ -48,6 +60,7 @@ export default class AdvertisementStore {
 
         try {
             const advertisementEntity = new AdvertisementEntity(updatedAdvertisement);
+            console.log(advertisementEntity);
             await agent.Advertisements.edit(advertisementEntity);
             runInAction(() => {
                 this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== updatedAdvertisement.id), updatedAdvertisement];
