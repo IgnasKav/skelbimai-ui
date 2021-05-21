@@ -44,9 +44,9 @@ const Categories = {
     edit: (category: Category) => requests.put(`/categories/${category.id}`, category)
 }
 const Account ={
-    current: () => requests.get<User>('/account'),
-    login:(user: UserFormValues) => requests.post<User>('/account/login',user),
-    register: (user: UserFormValues) => requests.post<User>('/account/register',user)
+    current: () => requests.get<User>('/user'),
+    login:(user: UserFormValues) => requests.post<User>('/user/login',user),
+    register: (user: UserFormValues) => requests.post<User>('/user/register',user)
 }
 const agent = {
     Advertisements: Advertisements,
