@@ -1,7 +1,9 @@
 import React, {useEffect} from 'react';
 import './styles.css';
 import AdvertisementDashboard from 'app/features/advertisements/advertisement-dashboard';
+import DashBoard from 'app/features/dashboard/dashboard';
 import Header from './Header/header';
+import Search from './Search/search';
 import {observer} from "mobx-react-lite";
 import {useStore} from 'app/stores/store';
 import {Route, Switch} from 'react-router-dom';
@@ -20,7 +22,9 @@ function App() {
     return (
         <>
             <Header/>
+            <Search/>
             <Switch>
+                <Route path='/dashboard' component={DashBoard}/>
                 <Route path='/categoriesDashboard' component={CategoriesDashboard}/>
                 <Route path="/createAdvertisement" component={AdvertisementEditPage}/>
                 <Route path="/edit/:advertisementId" component={AdvertisementEditPage}/>
