@@ -1,10 +1,9 @@
 import React from 'react';
 import css from './advertisement-list.module.scss';
 import {useStore} from "app/stores/store";
-import {useHistory} from "react-router-dom";
+import {history} from 'index';
 
 export default function AdvertisementList() {
-    let history = useHistory();
     const {advertisementStore} = useStore();
     const {advertisements} = advertisementStore;
 

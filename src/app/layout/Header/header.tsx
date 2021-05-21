@@ -1,11 +1,9 @@
 import React from 'react';
 import css from './header.module.scss';
 import Button from '@material-ui/core/Button';
-import {useHistory} from "react-router-dom";
+import {history} from "index";
 
 export default function Header() {
-    let history = useHistory();
-
     return (
         <>
             <div className={css.header}>

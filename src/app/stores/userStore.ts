@@ -2,6 +2,7 @@ import agent from "app/api/agent";
 import { User, UserFormValues } from "app/models/user";
 import { makeAutoObservable, runInAction } from "mobx";
 import { store } from "./store";
+import { history } from "index";
 
 export default class UserStore{
     
