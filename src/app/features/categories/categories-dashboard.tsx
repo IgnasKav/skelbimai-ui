@@ -43,7 +43,7 @@ export default observer(function CategoriesDashboard() {
                     </IconButton>
                 </div>
             ))}
-            <CategoryEditDialog open={dialogOpen} onClose={closeEditOrCreateDialog} onSubmit={create}/>
+            <CategoryEditDialog open={dialogOpen} onClose={closeEditOrCreateDialog} onSubmit={() => create}/>
         </div>
     )
 })

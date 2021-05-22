@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import css from './common-input-field.module.scss';
 import NumberFormat from 'react-number-format';
 
+
 interface Props {
     label: string;
     type?: string;
