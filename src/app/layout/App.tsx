@@ -9,6 +9,7 @@ import {Route, Switch} from 'react-router-dom';
 import CategoriesDashboard from "app/features/categories/categories-dashboard";
 import AdvertisementEditPage from "app/features/advertisements/advertisement-create/advertisement-edit";
 import LoginForm from 'app/features/users/LoginForm';
+import LoadingComponent from './loadingComponent';
 
 function App() {
     const {advertisementStore, categoryStore} = useStore();
@@ -17,6 +18,8 @@ function App() {
         advertisementStore.loadAdvertisements();
         categoryStore.loadCategories();
     }, [advertisementStore, categoryStore])
+
+    if (categoryStore.loading) return (<LoadingComponent inverted={true} content="Kraunama" />)
 
     return (
         <>
