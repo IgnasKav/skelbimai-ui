@@ -8,6 +8,8 @@ export default class AdvertisementStore {
     loading = false;
     loadingDetails = false;
     searching = false;
+    sortBy = -1;
+    category = "";
 
     constructor() {
         makeAutoObservable(this)
@@ -20,8 +22,6 @@ export default class AdvertisementStore {
             {
                 this.searching = false;
             }
-            
-            console.log(this.advertisements.length);
             if(this.searching)
             {
                 this.advertisements = await agent.Advertisements.list();
@@ -30,6 +30,7 @@ export default class AdvertisementStore {
             {
                 if(category.length != 0)
                 {
+                    this.category = category;
                     this.advertisements = await agent.Advertisements.listC(category);
                 }
                 else
@@ -45,7 +46,35 @@ export default class AdvertisementStore {
             });
         }
     }
-
+    sort = (by: any) => {
+        this.sortBy = by;
+    }
+    search = (name: string) => {
+        this.loading = true;
+        console.log("Name", name);
+        if(this.category != "")
+        {
+            this.advertisements = this.advertisements.filter(x => x.title == name).filter(x => x.category.id == this.category);
+        }
+        else
+        {
+            this.advertisements = this.advertisements.filter(x => x.title == name);
+            console.log(this.advertisements.length);
+        }
+       switch(this.sortBy)
+       {
+           case -1:
+               break;
+           case 0:
+               this.advertisements.sort();
+               break;
+           case 1:
+               this.advertisements.sort().reverse();
+       }
+       runInAction(() => {
+        this.loading = false;
+       });
+    }
     loadAdvertisement = async (id: string) => {
         this.loadingDetails = true;
         try {
