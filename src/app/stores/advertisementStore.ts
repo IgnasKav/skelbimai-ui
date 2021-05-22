@@ -13,19 +13,26 @@ export default class AdvertisementStore {
         makeAutoObservable(this)
     }
 
-    loadAdvertisements = async (name: string = "") => {
+    loadAdvertisements = async (name: string = "", category: string="") => {
         this.loading = true;
         try {
             if(name.length == 0)
             {
                 this.searching = false;
             }
+            
+            console.log(this.advertisements.length);
             if(this.searching)
             {
                 this.advertisements = await agent.Advertisements.list();
             }
             else
             {
+                if(category.length != 0)
+                {
+                    this.advertisements = await agent.Advertisements.listC(category);
+                }
+                else
                 this.advertisements = await agent.Advertisements.list();
             }
             runInAction(() => {

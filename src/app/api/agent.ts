@@ -32,6 +32,7 @@ const requests = {
 
 const Advertisements = {
     list: () => requests.get<Advertisement[]>('/advertisements'),
+    listC: (id: string) => requests.get<Advertisement[]>(`/advertisements/list/${id}`),
     details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
     create: (advertisement: AdvertisementEntity) => requests.post('/advertisements', advertisement),
     edit: (advertisement: AdvertisementEntity) => requests.put(`/advertisements/${advertisement.id}`, advertisement),

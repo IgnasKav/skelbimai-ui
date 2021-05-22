@@ -11,10 +11,9 @@ export default function Header() {
     const {categories} = categoryStore;
 
     const [searchField, setSearch] = useState<string>();
-    const [filterField, setFilter] = useState<string>();
     const history = useHistory();
 
-    if(categoryStore.loading) return <LoadingComponent inverted={true} content="Kraunama"/>
+    if(categoryStore.loading) return (<LoadingComponent inverted={true} content="Kraunama"/>)
 
     const GetSearch = (event: any) => {
         setSearch(event.target.value);
@@ -24,14 +23,8 @@ export default function Header() {
         advertisementStore.searching = true;
         advertisementStore.loadAdvertisements(searchField)
     }
-
-    const GetFilter = (event: any) => {
-        if(event.target.value === "None")
-            setFilter("");
-        setFilter(event.target.value)
-    }
     const FilterByCategory = (event: any) => {
-        advertisementStore.loadAdvertisements(filterField)
+        advertisementStore.loadAdvertisements("", event.target.value)
     }
     if(window.location.href === "http://localhost:3000/") {
         return (
