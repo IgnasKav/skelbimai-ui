@@ -33,7 +33,7 @@ export default function Header() {
             <div className={css.search}>
                 <div className={css.field}>
                     <input type="text" className={css.textField} placeholder={"Enter name"} onChange={GetSearch} />
-                    <span style={{ fontSize: "16px" }}>SortBy</span>
+                    <span style={{ fontSize: "16px" }}>SortByPrice</span>
                     <select className={css.textField} id="sort" name="sort" onChange={Sort}>
                         <option value="-1">None</option>
                         <option value="0">Ascending</option>

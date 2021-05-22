@@ -46,18 +46,11 @@ export default class AdvertisementStore {
     search = (name: string) => {
         this.loading = true;
         this.advertisements = this.advertisements.filter(ad => ad.title.includes(name));
-         switch(this.sortBy) {
-            case -1:
-                console.log("none");
-                break;
-            case 0:
-                console.log("ASCENDING");
-                this.advertisements.sort((a, b) => (a.price > b.price) ? 1 : -1);
-                break;
-            case 1:
-                console.log("DESCENDING");
-                this.advertisements.sort((a, b) => (a.price < b.price) ? 1 : -1);
-        }
+        if (this.sortBy == 1)
+            this.advertisements.sort((a, b) => (a.price < b.price) ? 1 : -1);
+        if (this.sortBy == 0)
+            this.advertisements.sort((a, b) => (a.price > b.price) ? 1 : -1);
+
         runInAction(() => {
             this.loading = false;
         });
