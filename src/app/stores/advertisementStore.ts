@@ -15,26 +15,20 @@ export default class AdvertisementStore {
         makeAutoObservable(this)
     }
 
-    loadAdvertisements = async (name: string = "", category: string="") => {
+    loadAdvertisements = async (name: string = "", category: string = "") => {
         this.loading = true;
         try {
-            if(name.length == 0)
-            {
+            if (name.length == 0) {
                 this.searching = false;
             }
-            if(this.searching)
-            {
+            if (this.searching) {
                 this.advertisements = await agent.Advertisements.list();
-            }
-            else
-            {
-                if(category.length != 0)
-                {
+            } else {
+                if (category.length != 0) {
                     this.category = category;
                     this.advertisements = await agent.Advertisements.listC(category);
-                }
-                else
-                this.advertisements = await agent.Advertisements.list();
+                } else
+                    this.advertisements = await agent.Advertisements.list();
             }
             runInAction(() => {
                 this.loading = false;
@@ -51,29 +45,22 @@ export default class AdvertisementStore {
     }
     search = (name: string) => {
         this.loading = true;
-        console.log("Name", name);
-        if(this.category != "")
-        {
-            this.advertisements = this.advertisements.filter(x => x.title == name).filter(x => x.category.id == this.category);
+        this.advertisements = this.advertisements.filter(ad => ad.title.includes(name));
+         switch(this.sortBy) {
+            case -1:
+                console.log("none");
+                break;
+            case 0:
+                console.log("ASCENDING");
+                this.advertisements.sort((a, b) => (a.price > b.price) ? 1 : -1);
+                break;
+            case 1:
+                console.log("DESCENDING");
+                this.advertisements.sort((a, b) => (a.price < b.price) ? 1 : -1);
         }
-        else
-        {
-            this.advertisements = this.advertisements.filter(x => x.title == name);
-            console.log(this.advertisements.length);
-        }
-       switch(this.sortBy)
-       {
-           case -1:
-               break;
-           case 0:
-               this.advertisements.sort();
-               break;
-           case 1:
-               this.advertisements.sort().reverse();
-       }
-       runInAction(() => {
-        this.loading = false;
-       });
+        runInAction(() => {
+            this.loading = false;
+        });
     }
     loadAdvertisement = async (id: string) => {
         this.loadingDetails = true;
@@ -83,7 +70,7 @@ export default class AdvertisementStore {
                 this.loadingDetails = false;
                 return advertisement;
             })
-        } catch (error){
+        } catch (error) {
             console.log(error);
             runInAction(() => {
                 this.loadingDetails = false;

@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import css from './search.module.scss';
 import Button from '@material-ui/core/Button';
-import { useHistory } from "react-router-dom";
 import { useStore } from 'app/stores/store';
 import LoadingComponent from '../loadingComponent';
-import { Category } from 'app/models/Category';
 
 export default function Header() {
     const { advertisementStore, categoryStore } = useStore();
@@ -13,13 +11,9 @@ export default function Header() {
 
     const [searchField, setSearch] = useState<string>("");
     const [sortBy, setSort] = useState("");
-    const [selectedFilter, setFilter] = useState<string>("");
-    const history = useHistory();
 
     const GetSearch = (event: any) => {
         setSearch(event.target.value);
-
-        console.log(event.target.value);
     }
     const Sort = (e: any) => {
         setSort(e.target.value)
@@ -30,7 +24,6 @@ export default function Header() {
         advertisementStore.search(searchField);
     }
     const FilterByCategory = (event: any) => {
-        setFilter(event.target.value);
         advertisementStore.loadAdvertisements("", event.target.value)
     }
     if (categoryStore.loading) return (<LoadingComponent inverted={true} content="Kraunama" />)
@@ -47,7 +40,8 @@ export default function Header() {
                         <option value="1">Descending</option>
                     </select>
                     <span style={{ fontSize: "16px" }}> FilterCategory</span>
-                    <select className={css.textField} value="6B2F31E7-82E7-4AF4-8F48-AB4EC4EB8D83" onChange={FilterByCategory}>
+                    <select className={css.textField} onChange={FilterByCategory}>
+                    <option selected>Select filter</option>
                         {
                             categories.map(category =>
                             (
