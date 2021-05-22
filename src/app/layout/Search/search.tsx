@@ -12,6 +12,9 @@ export default function Header() {
 
     const [searchField, setSearch] = useState<string>();
     const [filterField, setFilter] = useState<string>();
+    const history = useHistory();
+
+    if(categoryStore.loading) return <LoadingComponent inverted={true} content="Kraunama"/>
 
     const GetSearch = (event: any) => {
         setSearch(event.target.value);
@@ -30,36 +33,39 @@ export default function Header() {
     const FilterByCategory = (event: any) => {
         advertisementStore.loadAdvertisements(filterField)
     }
-
-    return (
-        <>
-        {
-            console.log()
-        }
-            <div className={css.search}>
-                <div className={css.field}>
-                    <input type="text" className={css.textField} placeholder={"Enter name"} onChange={GetSearch}/>
-                    <span style={{fontSize: "16px"}}>SortBy</span>
-                    <select className={css.textField} id="sort" name="sort">
-                    <option value="-1">None</option>
-                    <option value="volvo">Ascending</option>
-                    <option value="saab">Descending</option>
-                    </select>
-                    <span style={{fontSize: "16px"}}> FilterCategory</span>
-                    <select className={css.textField} id="filter" name="filter" onChange={FilterByCategory}>
-                    <option value="-1">None</option>
-                    {
-                        categories.map(category =>
-                            (
-                                <option value={category.id}>{category.name}</option>
-                            ))
-                    }
-                    </select>
+    if(window.location.href === "http://localhost:3000/") {
+        return (
+            <>
+                <div className={css.search}>
+                    <div className={css.field}>
+                        <input type="text" className={css.textField} placeholder={"Enter name"} onChange={GetSearch}/>
+                        <span style={{fontSize: "16px"}}>SortBy</span>
+                        <select className={css.textField} id="sort" name="sort">
+                            <option value="-1">None</option>
+                            <option value="volvo">Ascending</option>
+                            <option value="saab">Descending</option>
+                        </select>
+                        <span style={{fontSize: "16px"}}> FilterCategory</span>
+                        <select className={css.textField} id="filter" name="filter" onChange={FilterByCategory}>
+                            <option value="-1">None</option>
+                            {
+                                categories.map(category =>
+                                    (
+                                        <option value={category.id}>{category.name}</option>
+                                    ))
+                            }
+                        </select>
+                    </div>
+                    <div className={css.button}>
+                        <Button onClick={() => {
+                            Find()
+                        }} variant="outlined" color="default">Search</Button>
+                    </div>
                 </div>
-                <div className={css.button}>
-                    <Button onClick={() => {Find()}} variant="outlined" color="default" >Search</Button>
-                </div>
-            </div>
-        </>
-    )
+            </>
+        )
+    }
+    else{
+        return (<></>)
+    }
 }
