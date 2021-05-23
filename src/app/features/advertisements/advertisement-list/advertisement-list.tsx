@@ -7,8 +7,14 @@ export default function AdvertisementList() {
     const {advertisementStore} = useStore();
     const {advertisements} = advertisementStore;
 
+    const isEmpty = (ads: any) => {
+        if(ads == 0)
+            return <div style={{fontSize: "30px"}}>Skelbimų su šiais parametrais nerasta</div>
+        return <></>
+    }
     return (
         <>
+            {isEmpty(advertisements.length)}
             {advertisements.map(advertisement => (
                 <div key={advertisement.id} className={css.item} onClick={() => {
                     history.push(`/details/${advertisement.id}`)
