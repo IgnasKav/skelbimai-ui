@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import css from './common-input-field.module.scss';
 import NumberFormat from 'react-number-format';
+import {Label} from "semantic-ui-react";
 
 interface Props {
     label: string;
@@ -9,9 +10,10 @@ interface Props {
     name: string;
     value: any;
     onChange: (event: any) => void;
+    error?: string;
 }
 
-export default function CommonInput({label, type = "text", className, name, value, onChange}: Props) {
+export default function CommonInput({label, type = "text", className, name, value, onChange, error}: Props) {
     const [isFocused, setFocus] = useState<boolean>(false);
 
     const ChooseInputField = () => {
@@ -19,7 +21,7 @@ export default function CommonInput({label, type = "text", className, name, valu
             case "number": {
                 return (
                     <NumberFormat name={name} value={value} onValueChange={(values) => {
-                        const convertedValue = values.value ? +values.value: null;
+                        const convertedValue = values.value ? +values.value : null;
                         const event = {
                             target: {
                                 value: convertedValue,
@@ -27,17 +29,26 @@ export default function CommonInput({label, type = "text", className, name, valu
                             }
                         }
                         onChange(event);
-                    }} decimalScale={2} thousandSeparator={true} prefix={'€'} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}/>
+                    }} decimalScale={2} thousandSeparator={true} prefix={'€'} onFocus={() => setFocus(true)}
+                                  onBlur={() => setFocus(false)}/>
                 )
             }
             case "textarea": {
                 return (
-                    <textarea name={name} value={value} onChange={onChange} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}></textarea>
+                    <textarea name={name} value={value} onChange={onChange} onFocus={() => setFocus(true)}
+                              onBlur={() => setFocus(false)}></textarea>
+                )
+            }
+            case "password": {
+                return (
+                    <input name={name} value={value} type="password" onChange={onChange} onFocus={() => setFocus(true)}
+                           onBlur={() => setFocus(false)}/>
                 )
             }
             default: {
                 return (
-                    <input name={name} value={value} onChange={onChange} onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}/>
+                    <input name={name} value={value} onChange={onChange} onFocus={() => setFocus(true)}
+                           onBlur={() => setFocus(false)}/>
                 )
             }
         }
@@ -49,6 +60,9 @@ export default function CommonInput({label, type = "text", className, name, valu
             <div className={[css.inputField, isFocused ? css.focused : ''].join(' ')}>
                 {ChooseInputField()}
             </div>
+            {error && error != '' ? (
+                <div className={css.inputError}>{error}</div>
+            ) : null}
         </div>
     )
 }
