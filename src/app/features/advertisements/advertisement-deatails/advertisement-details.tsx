@@ -25,7 +25,7 @@ export default observer(function AdvertisementDetails() {
 
     const deleteAdvertisement = async () => {
         await advertisementStore.deleteAdvertisement(advertisement.id);
-        history.replace('/');
+        history.push('/advertisementDashboard');
     }
 
     //material ui
@@ -59,7 +59,7 @@ export default observer(function AdvertisementDetails() {
                 </Menu>
             </div>
             <div className={css.closeIconContainer}>
-                <CloseIcon onClick={() => history.replace('/')}/>
+                <CloseIcon onClick={() => history.push('/advertisementDashboard')}/>
             </div>
             <div className={css.title}>{advertisement.title}</div>
             <div className={css.info}>

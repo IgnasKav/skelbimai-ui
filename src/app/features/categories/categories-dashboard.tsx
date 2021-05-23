@@ -1,16 +1,20 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import css from './categories-dashboard.module.scss';
 import {useStore} from "app/stores/store";
 import {HiPencil, MdAdd} from "react-icons/all";
 import {observer} from "mobx-react-lite";
 import {Fab, IconButton} from "@material-ui/core";
 import CategoryEditDialog from "./category-edit/category-edit";
-import {Category} from "../../models/Category";
+import {Category} from "app/models/Category";
 
 export default observer(function CategoriesDashboard() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const {categoryStore} = useStore();
     const {categories, createCategory} = categoryStore;
+
+    useEffect(() => {
+        categoryStore.loadCategories();
+    }, [categoryStore])
 
     const openEditOrCreateDialog = () => {
         setDialogOpen(true);
