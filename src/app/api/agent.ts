@@ -1,6 +1,8 @@
+import { User, UserFormValues } from 'app/models/user';
 import axios, {AxiosResponse} from 'axios';
-import {Advertisement, AdvertisementEntity} from "../models/Advertisement";
-import {Category} from "../models/Category";
+import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
+import {Category} from "app/models/Category";
+import {store} from "app/stores/store";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -9,6 +11,12 @@ const sleep = (delay: number) => {
 }
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
+
+axios.interceptors.request.use(config => {
+    const token = store.commonStore.token;
+    if(token) config.headers.Authorization = `Bearer ${token}`
+    return config;
+})
 
 axios.interceptors.response.use(async response => {
     try {
@@ -41,10 +49,16 @@ const Categories = {
     create: (category: Category) => requests.post('/categories', category),
     edit: (category: Category) => requests.put(`/categories/${category.id}`, category)
 }
-
+const Account ={
+    current: () => requests.get<User>('/account'),
+    login:(user: UserFormValues) => requests.post<User>('/account/login',user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register',user)
+}
 const agent = {
     Advertisements: Advertisements,
-    Categories: Categories
+    Categories: Categories,
+    Account: Account
 }
+
 
 export default agent;

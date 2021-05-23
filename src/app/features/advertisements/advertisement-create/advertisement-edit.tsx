@@ -8,7 +8,7 @@ import {useHistory, useParams} from "react-router-dom";
 import {Advertisement} from "app/models/Advertisement";
 import {HiOutlineDocumentText, HiOutlineGlobe} from "react-icons/hi";
 import {observer} from "mobx-react-lite";
-import LoadingComponent from "../../../layout/loadingComponent";
+import LoadingComponent from "app/layout/loadingComponent";
 
 export default observer(function AdvertisementEditPage() {
     let history = useHistory();
@@ -39,7 +39,7 @@ export default observer(function AdvertisementEditPage() {
         } else {
             await updateAdvertisement(advertisement);
         }
-        history.replace('/');
+        history.push('/advertisementDashboard');
     }
 
     //loading
@@ -77,7 +77,7 @@ export default observer(function AdvertisementEditPage() {
                                  className={css.description} label="Aprašymas" type="textarea"/>
                 </div>
                 <div className={css.buttonGroup}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.replace('/')}>
+                    <Button variant="outlined" color="secondary" onClick={() => history.push('/advertisementDashboard')}>
                         Atšaukti
                     </Button>
                     <Button variant="outlined" color="primary"
