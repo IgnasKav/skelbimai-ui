@@ -17,7 +17,7 @@ export default function AdvertisementList() {
             {isEmpty(advertisements.length)}
             {advertisements.map(advertisement => (
                 <div key={advertisement.id} className={css.item} onClick={() => {
-                    history.push(`/details/${advertisement.id}`)
+                    history.push(`/advertisementDashboard/details/${advertisement.id}`)
                 }}>
                     <div className={css.left}>
                     </div>

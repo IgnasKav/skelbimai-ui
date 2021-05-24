@@ -1,0 +1,24 @@
+.loginForm {
+  margin: 0 auto;
+  position: relative;
+  top: 100px;
+  width: 340px;
+  padding: 20px;
+
+  form {
+    h1 {
+      text-align: center;
+    }
+    >div {
+      margin-bottom: 15px;
+    }
+    .formButtons {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        width: 145px;
+      }
+    }
+  }
+}

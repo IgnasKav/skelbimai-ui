@@ -1,5 +1,5 @@
 .inputFieldContainer {
-  height: 65px;
+  height: 80px;
 
   .label {
     font-family: 'Roboto-Medium';
@@ -11,7 +11,7 @@
     display: block;
     border-radius: 5px;
     border: 2px solid #9c9c9c;
-    height: calc(100% - 15px);
+    height: calc(100% - 30px);
 
     &.focused {
       border-color: #4343ff;
@@ -30,6 +30,13 @@
       padding: 10px;
       line-height: 20px;
     }
+  }
+  .inputError {
+    color: red;
+    font-size: 12px;
+    font-family: 'Roboto-Medium';
+    margin-top: 2px;
+    margin-left: 2px;
   }
 }
 
