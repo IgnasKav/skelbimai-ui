@@ -15,6 +15,7 @@ export default class CategoryStore {
         this.loading = true;
         try {
             this.categories = await agent.Categories.list();
+            this.loading = false;
             runInAction(() => {
                 this.loading = false;
             })

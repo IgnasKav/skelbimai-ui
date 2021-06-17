@@ -3,6 +3,7 @@ import css from './common-input-field.module.scss';
 import NumberFormat from 'react-number-format';
 import {Label} from "semantic-ui-react";
 
+
 interface Props {
     label: string;
     type?: string;

@@ -12,6 +12,8 @@ export default function Header() {
             <div className={css.header}>
                 <Button onClick={() => history.push('/advertisementDashboard')}>Skelbimai</Button>
                 <div className={css.spacer}></div>
+                <Button onClick={() => history.push('/')}>Skelbimai</Button>
+                <Button onClick={() => history.push('/dashboard')}>Panele</Button>
                 <Button onClick={() => history.push('/categoriesDashboard')}>Pridėti kategoriją</Button>
                 <Button onClick={() => history.push('/createAdvertisement')}>Pridėti skelbimą</Button>
                 <Button onClick={() => userStore.logout()}>Atsijungti</Button>

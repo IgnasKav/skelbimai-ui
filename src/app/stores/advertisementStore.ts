@@ -7,15 +7,29 @@ export default class AdvertisementStore {
     advertisements: Advertisement[] = [];
     loading = false;
     loadingDetails = false;
+    searching = false;
+    sortBy = -1;
+    category = "";
 
     constructor() {
         makeAutoObservable(this)
     }
 
-    loadAdvertisements = async () => {
+    loadAdvertisements = async (name: string = "", category: string = "") => {
         this.loading = true;
         try {
-            this.advertisements = await agent.Advertisements.list();
+            if (name.length == 0) {
+                this.searching = false;
+            }
+            if (this.searching) {
+                this.advertisements = await agent.Advertisements.list();
+            } else {
+                if (category.length != 0) {
+                    this.category = category;
+                    this.advertisements = await agent.Advertisements.listC(category);
+                } else
+                    this.advertisements = await agent.Advertisements.list();
+            }
             runInAction(() => {
                 this.loading = false;
             });
@@ -26,7 +40,21 @@ export default class AdvertisementStore {
             });
         }
     }
+    sort = (by: any) => {
+        this.sortBy = by;
+    }
+    search = (name: string) => {
+        this.loading = true;
+        this.advertisements = this.advertisements.filter(ad => ad.title.includes(name));
+        if (this.sortBy == 1)
+            this.advertisements.sort((a, b) => (a.price < b.price) ? 1 : -1);
+        if (this.sortBy == 0)
+            this.advertisements.sort((a, b) => (a.price > b.price) ? 1 : -1);
 
+        runInAction(() => {
+            this.loading = false;
+        });
+    }
     loadAdvertisement = async (id: string) => {
         this.loadingDetails = true;
         try {
@@ -35,7 +63,7 @@ export default class AdvertisementStore {
                 this.loadingDetails = false;
                 return advertisement;
             })
-        } catch (error){
+        } catch (error) {
             console.log(error);
             runInAction(() => {
                 this.loadingDetails = false;
@@ -48,6 +76,7 @@ export default class AdvertisementStore {
 
         try {
             const advertisementEntity = new AdvertisementEntity(updatedAdvertisement);
+            console.log(advertisementEntity);
             await agent.Advertisements.edit(advertisementEntity);
             runInAction(() => {
                 this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== updatedAdvertisement.id), updatedAdvertisement];
