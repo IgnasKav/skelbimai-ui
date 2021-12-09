@@ -3,7 +3,6 @@ import css from './categories-dashboard.module.scss';
 import {useStore} from "app/stores/store";
 import {HiPencil, MdAdd} from "react-icons/all";
 import {observer} from "mobx-react-lite";
-import {Fab, IconButton} from "@material-ui/core";
 import CategoryEditDialog from "./category-edit/category-edit";
 import {Category} from "app/models/Category";
 
@@ -35,16 +34,16 @@ export default observer(function CategoriesDashboard() {
         <div className={css.dashboard}>
             <div className={css.header}>
                 <div className={css.title}>Kategorijos</div>
-                <Fab color="secondary" onClick={openEditOrCreateDialog}>
+                <button color="secondary" onClick={openEditOrCreateDialog}>
                     <MdAdd/>
-                </Fab>
+                </button>
             </div>
             {categories.map(category => (
                 <div key={category.id} className={css.category}>
                     <div>{category.name}</div>
-                    <IconButton>
+                    <button>
                         <HiPencil/>
-                    </IconButton>
+                    </button>
                 </div>
             ))}
             <CategoryEditDialog open={dialogOpen} onClose={closeEditOrCreateDialog} onSubmit={create}/>

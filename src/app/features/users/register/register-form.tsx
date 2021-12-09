@@ -7,7 +7,6 @@ import * as Yup from "yup";
 import {UserFormValues} from "app/models/user";
 import CommonInput from "app/shared/inputs/common-input/common-input-field";
 import FormError from "app/shared/inputs/form-error/form-error";
-import {Card, Button} from "@material-ui/core";
 import {history} from "../../../../index";
 
 export default observer(function RegisterForm() {
@@ -31,7 +30,7 @@ export default observer(function RegisterForm() {
     });
 
     return (
-        <Card className={css.loginForm}>
+        <div className={css.loginForm}>
             <h1>Registracija</h1>
             <form onSubmit={formik.handleSubmit} autoComplete='off'>
                 <CommonInput label="Display Name" name="displayName" value={formik.values.displayName}
@@ -46,15 +45,15 @@ export default observer(function RegisterForm() {
                              onChange={formik.handleChange} error={formik.errors.password}/>
                 <FormError error={formError}/>
                 <div className={css.formButtons}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.push('/login')}>
+                    <button onClick={() => history.push('/login')}>
                         Prisijungimas
-                    </Button>
-                    <Button variant="outlined" color="primary" type="submit">
+                    </button>
+                    <button type="submit">
                         Registruotis
-                    </Button>
+                    </button>
                 </div>
             </form>
-        </Card>
+        </div>
 
     )
 })

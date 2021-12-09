@@ -1,21 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @font-face {
   font-family: 'Roboto';
-  src: url('../../fonts/Roboto-Regular.ttf') format('truetype');
+  src: url('fonts/Roboto-Regular.ttf') format('truetype');
  }
 
  @font-face {
   font-family: 'Roboto-Thin';
-  src: url('../../fonts/Roboto-Thin.ttf') format('truetype');
+  src: url('fonts/Roboto-Thin.ttf') format('truetype');
  }
 
  @font-face {
   font-family: 'Roboto-Light';
-  src: url('../../fonts/Roboto-Light.ttf') format('truetype');
+  src: url('fonts/Roboto-Light.ttf') format('truetype');
  }
 
  @font-face {
   font-family: 'Roboto-Medium';
-  src: url('../../fonts/Roboto-Medium.ttf') format('truetype');
+  src: url('fonts/Roboto-Medium.ttf') format('truetype');
  }
 
 body {

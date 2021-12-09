@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import css from './advertisement-edit.module.scss';
 import CommonInput from "app/shared/inputs/common-input/common-input-field";
-import {Button} from '@material-ui/core';
 import {useStore} from "app/stores/store";
 import SelectInput from "app/shared/inputs/category-input/category-select-field";
 import {useHistory, useParams} from "react-router-dom";
@@ -74,16 +73,16 @@ export default observer(function AdvertisementEditPage() {
                                      type="number"/>
                     </div>
                     <CommonInput name="description" value={advertisement.description} onChange={handleInputChange}
-                                 className={css.description} label="Aprašymas" type="textarea"/>
+                                 label="Aprašymas" type="textarea"/>
                 </div>
                 <div className={css.buttonGroup}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.push('/advertisementDashboard')}>
+                    <button color="secondary" onClick={() => history.push('/advertisementDashboard')}>
                         Atšaukti
-                    </Button>
-                    <Button variant="outlined" color="primary"
+                    </button>
+                    <button color="primary"
                             onClick={() => createOrEditAdvertisement()}>
                         {isNew ? 'Sukurti' : 'Išsaugoti'}
-                    </Button>
+                    </button>
                 </div>
             </div>
             <div className={css.preview}>

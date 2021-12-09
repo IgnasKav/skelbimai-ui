@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import css from './advertisement-dashboard.module.scss';
 import AdvertisementList from './advertisement-list/advertisement-list';
 import AdvertisementDetails from './advertisement-deatails/advertisement-details';
@@ -9,12 +9,7 @@ import LoadingComponent from "../../layout/loadingComponent";
 
 export default observer(function AdvertisementDashboard() {
 
-    const {advertisementStore, categoryStore} = useStore();
-
-    useEffect(() => {
-        advertisementStore.loadAdvertisements();
-        categoryStore.loadCategories();
-    }, [advertisementStore, categoryStore])
+    const {advertisementStore} = useStore();
 
     if(advertisementStore.loading) return <LoadingComponent inverted={true} content="Kraunami skelbimai"/>
 

@@ -3,7 +3,6 @@ import CloseIcon from 'app/shared/icons/close-icon';
 import css from './advertisement-details.module.scss';
 import {HiOutlineGlobe, HiOutlineDocumentText, HiEye, HiOutlineCog} from "react-icons/hi";
 import {useStore} from "app/stores/store";
-import {IconButton, Menu, MenuItem} from "@material-ui/core";
 import {useParams} from "react-router-dom";
 import {Advertisement} from "app/models/Advertisement";
 import {observer} from "mobx-react-lite";
@@ -45,18 +44,16 @@ export default observer(function AdvertisementDetails() {
     return (
         <>
             <div className={css.optionButton}>
-                <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>
-                <Menu
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={() => {
-                        history.push(`/edit/${advertisement.id}`)
-                    }}>Redaguoti</MenuItem>
-                    <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
-                </Menu>
+                <button onClick={handleClick}><HiOutlineCog/></button>
+                {/*<select*/}
+                {/*    open={Boolean(anchorEl)}*/}
+                {/*    onClose={handleClose}*/}
+                {/*>*/}
+                {/*    <option onClick={() => {*/}
+                {/*        history.push(`/edit/${advertisement.id}`)*/}
+                {/*    }}>Redaguoti</option>*/}
+                {/*    <option onClick={() => deleteAdvertisement()}>Ištrinti</option>*/}
+                {/*</select>*/}
             </div>
             <div className={css.closeIconContainer}>
                 <CloseIcon onClick={() => history.push('/advertisementDashboard')}/>

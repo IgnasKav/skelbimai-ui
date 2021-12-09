@@ -2,21 +2,19 @@ import css from "../category-select-field.module.scss";
 import React, {useEffect, useState} from "react";
 import CloseIcon from "app/shared/icons/close-icon";
 import {useStore} from "app/stores/store";
-import styled from 'styled-components';
-import {Button} from "@material-ui/core";
 import {Category} from "app/models/Category";
 
-const CategoryChip = styled.div<any>(props => ({
-    cursor: 'pointer',
-    display: 'initial',
-    borderRadius: '5px',
-    border: '2px solid',
-    padding: '3px',
-    borderColor: props.selected ? '#4343ff' : 'transparent',
-    ":hover": {
-        borderColor: '#4343ff'
-    }
-}));
+// const CategoryChip = styled.div<any>(props => ({
+//     cursor: 'pointer',
+//     display: 'initial',
+//     borderRadius: '5px',
+//     border: '2px solid',
+//     padding: '3px',
+//     borderColor: props.selected ? '#4343ff' : 'transparent',
+//     ":hover": {
+//         borderColor: '#4343ff'
+//     }
+// }));
 
 interface Props {
     close: () => void;
@@ -47,19 +45,20 @@ export default function CategorySelectForm({submit, close, value}: Props) {
                         categories.map(category => {
                             const isCategorySelected = selectedCategory && selectedCategory.id === category.id;
                             return (
-                                <CategoryChip key={category.id}
-                                          selected={isCategorySelected}
-                                          onClick={ () => selectCategory(category)}
-                                >
-                                    {category.name}
-                                </CategoryChip>
+                                <div></div>
+                                // <CategoryChip key={category.id}
+                                //           selected={isCategorySelected}
+                                //           onClick={ () => selectCategory(category)}
+                                // >
+                                //     {category.name}
+                                // </CategoryChip>
                             )
                         })
                     }
                 </div>
-                <Button variant="outlined" color="primary" onClick={() => submit(selectedCategory)}>
+                <button color="primary" onClick={() => submit(selectedCategory)}>
                     Pasirinkti
-                </Button>
+                </button>
             </div>
         </div>
     )

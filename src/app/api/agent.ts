@@ -3,6 +3,7 @@ import axios, {AxiosResponse} from 'axios';
 import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
 import {Category} from "app/models/Category";
 import {store} from "app/stores/store";
+import {SearchRequest} from "../models/SearchRequest";
 
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
@@ -20,7 +21,7 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(async response => {
     try {
-        await sleep(1000);
+        //await sleep(1000);
         return response;
     } catch (error) {
         return await Promise.reject(error);
@@ -37,7 +38,7 @@ const requests = {
 }
 
 const Advertisements = {
-    list: () => requests.get<Advertisement[]>('/advertisements'),
+    list: (searchRequest: SearchRequest) => requests.post<Advertisement[]>('/advertisements/search', searchRequest),
     details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
     create: (advertisement: AdvertisementEntity) => requests.post('/advertisements', advertisement),
     edit: (advertisement: AdvertisementEntity) => requests.put(`/advertisements/${advertisement.id}`, advertisement),

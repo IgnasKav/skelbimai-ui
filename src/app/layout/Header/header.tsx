@@ -1,20 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import css from './header.module.scss';
-import Button from '@material-ui/core/Button';
 import {history} from "index";
-import {useStore} from "../../stores/store";
+import {useStore} from "app/stores/store";
+import SearchInput from "app/shared/inputs/search-input/search-input";
 
 export default function Header() {
-    const {userStore} = useStore();
+    const {userStore, advertisementStore, categoryStore} = useStore();
+
+    const handleInputChange = (searchText: string) => {
+        advertisementStore.loadAdvertisements(searchText);
+    }
+
+    useEffect(() => {
+        advertisementStore.loadAdvertisements();
+        categoryStore.loadCategories();
+    }, [advertisementStore, categoryStore])
 
     return (
         <>
             <div className={css.header}>
-                <Button onClick={() => history.push('/advertisementDashboard')}>Skelbimai</Button>
+                <button onClick={() => history.push('/advertisementDashboard')}>Skelbimai</button>
                 <div className={css.spacer}></div>
-                <Button onClick={() => history.push('/categoriesDashboard')}>Pridėti kategoriją</Button>
-                <Button onClick={() => history.push('/createAdvertisement')}>Pridėti skelbimą</Button>
-                <Button onClick={() => userStore.logout()}>Atsijungti</Button>
+                <SearchInput onChange={handleInputChange}/>
+                <div className={css.spacer}></div>
+                <button onClick={() => history.push('/categoriesDashboard')}>Pridėti kategoriją</button>
+                <button onClick={() => history.push('/createAdvertisement')}>Pridėti skelbimą</button>
+                <button onClick={() => userStore.logout()}>Atsijungti</button>
             </div>
         </>
     )

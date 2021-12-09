@@ -1,18 +1,17 @@
 import React from 'react'
 import css from './home.module.scss'
-import {Button, Paper} from "@material-ui/core";
 import {history} from 'index';
 
 export default function Home() {
     return (
         <div className={css.homePage}>
-            <Paper>
+            <div>
                 <h1>Skelbimų portalas</h1>
                 <div className={css.buttonGroup}>
-                    <Button variant="contained" onClick={() => history.push('/login')}>Prisijungti</Button>
-                    <Button variant="contained" onClick={() => history.push('/register')}>Registruotis</Button>
+                    <button onClick={() => history.push('/login')}>Prisijungti</button>
+                    <button onClick={() => history.push('/register')}>Registruotis</button>
                 </div>
-            </Paper>
+            </div>
         </div>
     )
 }
