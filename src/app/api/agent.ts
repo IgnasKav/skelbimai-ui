@@ -1,26 +1,27 @@
-import { User, UserFormValues } from 'app/models/user';
+import {User, UserFormValues} from 'app/models/user';
 import axios, {AxiosResponse} from 'axios';
 import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
 import {Category} from "app/models/Category";
 import {store} from "app/stores/store";
+import {SearchRequest} from "../models/SearchRequest";
 
-const sleep = (delay: number) => {
-    return new Promise((resolve) => {
-        setTimeout(resolve, delay);
-    });
-}
+// const sleep = (delay: number) => {
+//     return new Promise((resolve) => {
+//         setTimeout(resolve, delay);
+//     });
+// }
 
 axios.defaults.baseURL = 'http://localhost:5000/api';
 
 axios.interceptors.request.use(config => {
     const token = store.commonStore.token;
-    if(token) config.headers.Authorization = `Bearer ${token}`
+    if (token) config.headers.Authorization = `Bearer ${token}`
     return config;
 })
 
 axios.interceptors.response.use(async response => {
     try {
-        await sleep(1000);
+        //await sleep(1000);
         return response;
     } catch (error) {
         return await Promise.reject(error);
@@ -37,7 +38,7 @@ const requests = {
 }
 
 const Advertisements = {
-    list: () => requests.get<Advertisement[]>('/advertisements'),
+    list: (searchRequest: SearchRequest) => requests.post<Advertisement[]>('/advertisements/search', searchRequest),
     details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
     create: (advertisement: AdvertisementEntity) => requests.post('/advertisements', advertisement),
     edit: (advertisement: AdvertisementEntity) => requests.put(`/advertisements/${advertisement.id}`, advertisement),
@@ -49,10 +50,10 @@ const Categories = {
     create: (category: Category) => requests.post('/categories', category),
     edit: (category: Category) => requests.put(`/categories/${category.id}`, category)
 }
-const Account ={
+const Account = {
     current: () => requests.get<User>('/account'),
-    login:(user: UserFormValues) => requests.post<User>('/account/login',user),
-    register: (user: UserFormValues) => requests.post<User>('/account/register',user)
+    login: (user: UserFormValues) => requests.post<User>('/account/login', user),
+    register: (user: UserFormValues) => requests.post<User>('/account/register', user)
 }
 const agent = {
     Advertisements: Advertisements,

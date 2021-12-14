@@ -34,10 +34,10 @@ export default observer(function RegisterForm() {
         <Card className={css.loginForm}>
             <h1>Registracija</h1>
             <form onSubmit={formik.handleSubmit} autoComplete='off'>
-                <CommonInput label="Display Name" name="displayName" value={formik.values.displayName}
+                <CommonInput label="Vardas Pavardė" name="displayName" value={formik.values.displayName}
                              onChange={formik.handleChange}
                              error={formik.errors.displayName}/>
-                <CommonInput label="Username" name="username" value={formik.values.username}
+                <CommonInput label="Slapyvardis" name="username" value={formik.values.username}
                              onChange={formik.handleChange}
                              error={formik.errors.username}/>
                 <CommonInput label="E-mail" name="email" value={formik.values.email} onChange={formik.handleChange}

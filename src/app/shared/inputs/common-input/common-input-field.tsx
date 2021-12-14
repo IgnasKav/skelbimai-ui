@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import css from './common-input-field.module.scss';
 import NumberFormat from 'react-number-format';
-import {Label} from "semantic-ui-react";
 
 interface Props {
     label: string;
@@ -60,7 +59,7 @@ export default function CommonInput({label, type = "text", className, name, valu
             <div className={[css.inputField, isFocused ? css.focused : ''].join(' ')}>
                 {ChooseInputField()}
             </div>
-            {error && error != '' ? (
+            {error && error !== '' ? (
                 <div className={css.inputError}>{error}</div>
             ) : null}
         </div>

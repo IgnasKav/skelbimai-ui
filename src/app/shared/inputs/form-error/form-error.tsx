@@ -7,6 +7,6 @@ interface Props {
 
 export default function FormError({error}: Props) {
     return (
-        error != '' ? <div className={css.errorField}>{error}</div> : null
+        error !== '' ? <div className={css.errorField}>{error}</div> : null
     )
 }
