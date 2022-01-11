@@ -8,15 +8,17 @@ import {UserFormValues} from "app/models/user";
 import CommonInput from "app/shared/inputs/common-input/common-input-field";
 import FormError from "app/shared/inputs/form-error/form-error";
 import {Card, Button} from "@material-ui/core";
-import {history} from "../../../../index";
+import {useNavigate} from "react-router-dom";
 
 export default observer(function RegisterForm() {
+    let navigate = useNavigate();
     const {userStore} = useStore();
 
     const [formError, setFormError] = useState<string>("");
 
-    const submit = (values: UserFormValues) => {
-        userStore.register(values).catch(error => setFormError(error))
+    const submit = async (values: UserFormValues) => {
+       await userStore.register(values).catch(error => setFormError(error));
+       navigate('/advertisementDashboard');
     }
 
     const formik = useFormik({
@@ -46,7 +48,7 @@ export default observer(function RegisterForm() {
                              onChange={formik.handleChange} error={formik.errors.password}/>
                 <FormError error={formError}/>
                 <div className={css.formButtons}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.push('/login')}>
+                    <Button variant="outlined" color="secondary" onClick={() => navigate('/login')}>
                         Prisijungimas
                     </Button>
                     <Button variant="outlined" color="primary" type="submit">

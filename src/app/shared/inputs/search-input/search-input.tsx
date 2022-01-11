@@ -1,5 +1,5 @@
 import css from './search-input.module.scss';
-import React, {useEffect, useRef, useState} from "react";
+import React, {useRef, useState} from "react";
 import {FcSearch} from "react-icons/all";
 
 interface Props {
@@ -20,7 +20,7 @@ export default function SearchInput({onChange}: Props) {
     const focusField = () => {
         if (inputElement?.current) {
             const value = inputElement.current.value;
-            if (value.trim() != "") {
+            if (value.trim() !== "") {
                 onChange(value);
             } else {
                 inputElement.current.focus();

@@ -4,14 +4,14 @@ import CommonInput from "app/shared/inputs/common-input/common-input-field";
 import {Button} from '@material-ui/core';
 import {useStore} from "app/stores/store";
 import SelectInput from "app/shared/inputs/category-input/category-select-field";
-import {useHistory, useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Advertisement} from "app/models/Advertisement";
 import {HiOutlineDocumentText, HiOutlineGlobe} from "react-icons/hi";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "app/layout/loadingComponent";
 
 export default observer(function AdvertisementEditPage() {
-    let history = useHistory();
+    let navigate = useNavigate();
     const {advertisementStore} = useStore();
     const {
         createAdvertisement,
@@ -39,7 +39,7 @@ export default observer(function AdvertisementEditPage() {
         } else {
             await updateAdvertisement(advertisement);
         }
-        history.push('/advertisementDashboard');
+        navigate('/advertisementDashboard');
     }
 
     //loading
@@ -77,7 +77,7 @@ export default observer(function AdvertisementEditPage() {
                                  className={css.description} label="Aprašymas" type="textarea"/>
                 </div>
                 <div className={css.buttonGroup}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.push('/advertisementDashboard')}>
+                    <Button variant="outlined" color="secondary" onClick={() => navigate('/advertisementDashboard')}>
                         Atšaukti
                     </Button>
                     <Button variant="outlined" color="primary"

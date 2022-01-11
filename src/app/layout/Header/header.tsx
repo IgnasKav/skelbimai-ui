@@ -1,14 +1,21 @@
 import React, {useEffect} from 'react';
 import css from './header.module.scss';
-import {history} from "index";
 import {useStore} from "app/stores/store";
 import SearchInput from "app/shared/inputs/search-input/search-input";
+import {Button} from "@material-ui/core";
+import {useNavigate} from "react-router-dom";
 
 export default function Header() {
     const {userStore, advertisementStore, categoryStore} = useStore();
+    let navigate = useNavigate();
 
     const handleInputChange = (searchText: string) => {
         advertisementStore.loadAdvertisements(searchText);
+    }
+
+    const logout = async () => {
+        userStore.logout();
+        navigate('/');
     }
 
     useEffect(() => {
@@ -19,13 +26,13 @@ export default function Header() {
     return (
         <>
             <div className={css.header}>
-                <button onClick={() => history.push('/advertisementDashboard')}>Skelbimai</button>
+                <Button onClick={() => navigate('/advertisementDashboard')}>Skelbimai</Button>
                 <div className={css.spacer}></div>
                 <SearchInput onChange={handleInputChange}/>
                 <div className={css.spacer}></div>
-                <button onClick={() => history.push('/categoriesDashboard')}>Pridėti kategoriją</button>
-                <button onClick={() => history.push('/createAdvertisement')}>Pridėti skelbimą</button>
-                <button onClick={() => userStore.logout()}>Atsijungti</button>
+                <Button onClick={() => navigate('/categoriesDashboard')}>Pridėti kategoriją</Button>
+                <Button onClick={() => navigate('/createAdvertisement')}>Pridėti skelbimą</Button>
+                <Button onClick={() => logout()}>Atsijungti</Button>
             </div>
         </>
     )

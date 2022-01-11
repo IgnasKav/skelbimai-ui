@@ -4,13 +4,13 @@ import css from './advertisement-details.module.scss';
 import {HiOutlineGlobe, HiOutlineDocumentText, HiEye, HiOutlineCog} from "react-icons/hi";
 import {useStore} from "app/stores/store";
 import {IconButton, Menu, MenuItem} from "@material-ui/core";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
 import {Advertisement} from "app/models/Advertisement";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "app/layout/loadingComponent";
-import {history} from "index";
 
 export default observer(function AdvertisementDetails() {
+    let navigate = useNavigate();
     const {advertisementStore} = useStore();
     const {
         loadAdvertisement
@@ -25,7 +25,7 @@ export default observer(function AdvertisementDetails() {
 
     const deleteAdvertisement = async () => {
         await advertisementStore.deleteAdvertisement(advertisement.id);
-        history.push('/advertisementDashboard');
+        navigate('/advertisementDashboard');
     }
 
     //material ui
@@ -53,13 +53,13 @@ export default observer(function AdvertisementDetails() {
                     onClose={handleClose}
                 >
                     <MenuItem onClick={() => {
-                        history.push(`/edit/${advertisement.id}`)
+                        navigate(`/edit/${advertisement.id}`)
                     }}>Redaguoti</MenuItem>
                     <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
                 </Menu>
             </div>
             <div className={css.closeIconContainer}>
-                <CloseIcon onClick={() => history.push('/advertisementDashboard')}/>
+                <CloseIcon onClick={() => navigate('/advertisementDashboard')}/>
             </div>
             <div className={css.title}>{advertisement.title}</div>
             <div className={css.info}>

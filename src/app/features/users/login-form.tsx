@@ -8,14 +8,16 @@ import * as Yup from 'yup';
 import {UserFormValues} from "app/models/user";
 import {Button, Card} from "@material-ui/core";
 import FormError from "app/shared/inputs/form-error/form-error";
-import {history} from "index";
+import {useNavigate} from "react-router-dom";
 
 export default observer(function LoginForm() {
+    let navigate = useNavigate();
     const {userStore} = useStore();
     const [formError, setFormError] = useState<string>("");
 
-    const submit = (values: UserFormValues) => {
-        userStore.login(values).catch(error => setFormError( 'Invalid email or password'))
+    const submit = async (values: UserFormValues) => {
+       await userStore.login(values).catch(error => setFormError( 'Invalid email or password'));
+       navigate('/advertisementDashboard');
     }
 
     const formik = useFormik({
@@ -38,7 +40,7 @@ export default observer(function LoginForm() {
                              onChange={formik.handleChange} error={formik.errors.password}/>
                 <FormError error={formError}/>
                 <div className={css.formButtons}>
-                    <Button variant="outlined" color="secondary" onClick={() => history.push('/register')}>
+                    <Button variant="outlined" color="secondary" onClick={() => navigate('/register')}>
                         Registracija
                     </Button>
                     <Button variant="outlined" color="primary" type="submit">

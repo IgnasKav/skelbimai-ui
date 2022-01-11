@@ -4,12 +4,11 @@ import AdvertisementDashboard from 'app/features/advertisements/advertisement-da
 import Header from './Header/header';
 import {observer} from "mobx-react-lite";
 import {useStore} from 'app/stores/store';
-import {Route, Switch} from 'react-router-dom';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import CategoriesDashboard from "app/features/categories/categories-dashboard";
 import AdvertisementEditPage from "app/features/advertisements/advertisement-create/advertisement-edit";
 import LoginForm from 'app/features/users/login-form';
 import RegisterForm from 'app/features/users/register/register-form';
-import Home from "app/features/users/home/home";
 import LoadingComponent from "./loadingComponent";
 
 function App() {
@@ -28,17 +27,27 @@ function App() {
     return (
         <>
             {userStore.isLoggedIn && <Header/>}
-            <Switch>
-                <Route path='/categoriesDashboard' component={CategoriesDashboard}/>
-                <Route path="/createAdvertisement" component={AdvertisementEditPage}/>
-                <Route path="/edit/:advertisementId" component={AdvertisementEditPage}/>
-                <Route path='/advertisementDashboard' component={AdvertisementDashboard}/>
-                <Route path='/login' component={LoginForm}/>
-                <Route path='/register' component={RegisterForm}/>
-                <Route path='/' component={Home}/>
-            </Switch>
+            <Routes>
+                <Route path='/categoriesDashboard' element={<CategoriesDashboard/>}/>
+                <Route path="/createAdvertisement" element={<AdvertisementEditPage/>}/>
+                <Route path="/edit/:advertisementId" element={<AdvertisementEditPage/>}/>
+                <Route path='/advertisementDashboard/*' element={<RequireAuth>
+                    <AdvertisementDashboard/>
+                </RequireAuth>}/>
+                <Route path='/login' element={<LoginForm/>}/>
+                <Route path='/register' element={<RegisterForm/>}/>
+            </Routes>
         </>
     );
+}
+
+function RequireAuth({children}: {children: JSX.Element}) {
+    const {userStore} = useStore();
+
+    if(!userStore.isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
+    return children;
 }
 
 export default observer(App);
