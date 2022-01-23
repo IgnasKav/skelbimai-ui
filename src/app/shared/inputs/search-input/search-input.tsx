@@ -1,6 +1,6 @@
 import css from './search-input.module.scss';
 import React, {useRef, useState} from "react";
-import {FcSearch} from "react-icons/all";
+import {FcSearch} from "react-icons/fc";
 
 interface Props {
     onChange: (event: any) => void;

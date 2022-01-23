@@ -8,7 +8,7 @@ import {
     DialogTitle,
     IconButton
 } from "@material-ui/core";
-import {MdClose} from "react-icons/all";
+import {MdClose} from "react-icons/md";
 import CommonInput from "app/shared/inputs/common-input/common-input-field";
 
 interface Props {
