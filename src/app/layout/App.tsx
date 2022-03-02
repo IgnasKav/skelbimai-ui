@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import './styles.css';
+import './treestyles.scss';
 import AdvertisementDashboard from 'app/features/advertisements/advertisement-dashboard';
 import Header from './Header/header';
 import {observer} from "mobx-react-lite";

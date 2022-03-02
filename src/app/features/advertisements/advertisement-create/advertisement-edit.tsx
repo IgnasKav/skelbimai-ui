@@ -9,6 +9,7 @@ import {Advertisement} from "app/models/Advertisement";
 import {HiOutlineDocumentText, HiOutlineGlobe} from "react-icons/hi";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "app/layout/loadingComponent";
+import TreeSelect from 'app/shared/inputs/tree-select/tree-select';
 
 export default observer(function AdvertisementEditPage() {
     let navigate = useNavigate();
@@ -68,8 +69,9 @@ export default observer(function AdvertisementEditPage() {
                     <div className={css.formRow}>
                         <CommonInput name="city" value={advertisement.city} onChange={handleInputChange}
                                      label="Miestas"/>
-                        <SelectInput name="category" value={advertisement.category} label="Kategorija"
-                                     onChange={handleInputChange}/>
+                        {/*<SelectInput name="category" value={advertisement.category} label="Kategorija"*/}
+                        {/*             onChange={handleInputChange}/>*/}
+                        <TreeSelect label="Kategorija"/>
                         <CommonInput name="price" value={advertisement.price} onChange={handleInputChange} label="Kaina"
                                      type="number"/>
                     </div>
