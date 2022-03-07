@@ -194,7 +194,7 @@
   font-variant: tabular-nums;
   line-height: 1.5715;
   list-style: none;
-  font-feature-settings: 'tnum', "tnum",;
+  font-feature-settings: 'tnum', "tnum";
   position: absolute;
   top: -9999px;
   left: -9999px;
@@ -214,18 +214,21 @@
   }
 
   .ant-select-tree {
-    border-radius: 0;
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    color: rgba(0, 0, 0, 0.85);
+    color: #000000d9;
     font-size: 14px;
     font-variant: tabular-nums;
     line-height: 1.5715;
     list-style: none;
-    font-feature-settings: 'tnum', "tnum";
-    background: #fff;
-    transition: background-color 0.3s;
+    font-feature-settings: "tnum";
+    position: relative;
+    top: 0.2em;
+    line-height: 1;
+    white-space: nowrap;
+    outline: none;
+    cursor: pointer;
 
     .ant-select-tree-treenode {
       display: flex;
@@ -305,6 +308,16 @@
               opacity: 1;
               transition: all 0.2s cubic-bezier(0.12, 0.4, 0.29, 1.46) 0.1s;
               content: ' ';
+              //content: "";
+              //position: absolute;
+              //display: block;
+              //left: 4px;
+              //bottom: 4px;
+              //width: 5.5px;
+              //height: 9.5px;
+              //border: solid white;
+              //border-width: 0 2px 2px 0;
+              //transform: rotate(45deg);
             }
           }
           &:after {
@@ -324,7 +337,7 @@
           }
         }
         &.ant-select-tree-checkbox-indeterminate .ant-select-tree-checkbox-inner{
-          &.after {
+          &:after {
             top: 50%;
             left: 50%;
             width: 8px;
@@ -351,20 +364,20 @@
           border-collapse: separate;
           transition: all 0.3s;
 
-          &.after {
+          &:after {
             position: absolute;
-            top: 50%;
-            left: 21.5%;
+            top: 49%;
+            left: 20%;
             display: table;
-            width: 5.71428571px;
-            height: 9.14285714px;
+            width: 4.7px;
+            height: 7px;
             border: 2px solid #fff;
             border-top: 0;
             border-left: 0;
             transform: rotate(45deg) scale(0) translate(-50%, -50%);
             opacity: 0;
             transition: all 0.1s cubic-bezier(0.71, -0.46, 0.88, 0.6), opacity 0.1s;
-            content: ' ';
+            content: " ";
           }
         }
       }

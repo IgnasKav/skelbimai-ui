@@ -1,5 +1,5 @@
 import { TreeSelect as AntTreeSelect } from 'antd';
-//import 'antd/dist/antd.css';
+// import 'antd/dist/antd.css';
 import css from './tree-select.module.scss';
 
 interface TreeNode {
