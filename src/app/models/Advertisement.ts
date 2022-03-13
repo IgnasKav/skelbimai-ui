@@ -31,6 +31,7 @@ export class AdvertisementEntity {
     categoryId: string = '';
     city: string = '';
     price: number = 0;
+    views: number = 0;
 
     constructor(advertisement?: Advertisement) {
         if(advertisement) {
@@ -40,6 +41,7 @@ export class AdvertisementEntity {
             this.categoryId = advertisement.category.id;
             this.city = advertisement.city;
             this.price = advertisement.price;
+            this.views = advertisement.views;
         }
     }
 }

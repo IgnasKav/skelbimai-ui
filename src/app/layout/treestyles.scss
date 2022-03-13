@@ -1,15 +1,7 @@
 .ant-select {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   color: rgba(0, 0, 0, 0.85);
   font-size: 14px;
-  font-variant: tabular-nums;
-  line-height: 1.5715;
-  list-style: none;
-  font-feature-settings: 'tnum', "tnum";
   position: relative;
-  display: inline-block;
   cursor: pointer;
 
   input[type="search"]::-webkit-search-decoration,
@@ -20,38 +12,17 @@
   }
 
   .ant-select-selector {
+    display: flex;
+    border-radius: 5px;
+    border: 2px solid #9c9c9c;
+    height: 40px;
+    padding: 4px 5px;
     cursor: text;
     position: relative;
     background-color: #fff;
-    border: 1px solid #d9d9d9;
-    border-radius: 2px;
-    transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-    display: flex;
     flex-wrap: wrap;
     align-items: center;
-    padding: 1px 4px;
 
-    &:after {
-      display: inline-block;
-      width: 0;
-      margin: 2px 0;
-      line-height: 24px;
-      content: '\a0';
-    }
-    .ant-select-selection-placeholder {
-      position: absolute;
-      top: 50%;
-      right: 11px;
-      left: 11px;
-      transform: translateY(-50%);
-      transition: all 0.3s;
-      flex: 1 1;
-      overflow: hidden;
-      color: #bfbfbf;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      pointer-events: none;
-    }
     .ant-select-selection-overflow {
       position: relative;
       display: flex;
@@ -68,7 +39,6 @@
           position: relative;
           display: flex;
           flex: none;
-          box-sizing: border-box;
           max-width: 100%;
           height: 24px;
           margin-top: 2px;
@@ -78,9 +48,6 @@
           border: 1px solid #f0f0f0;
           border-radius: 2px;
           cursor: default;
-          transition: font-size 0.3s, line-height 0.3s, height 0.3s;
-          -webkit-user-select: none;
-          user-select: none;
           margin-inline-end: 4px;
           padding-inline-start: 8px;
           padding-inline-end: 4px;
@@ -95,39 +62,14 @@
             overflow: hidden;
             white-space: pre;
             text-overflow: ellipsis;
-            line-height: 22px;
-            cursor: default;
-            -webkit-user-select: none;
-            user-select: none;
-            font-weight: normal;
           }
           .ant-select-selection-item-remove {
-            color: inherit;
-            font-style: normal;
-            line-height: 0;
-            text-align: center;
-            text-transform: none;
-            vertical-align: -0.125em;
-            text-rendering: optimizelegibility;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            display: inline-block;
             color: rgba(0, 0, 0, 0.45);
-            font-weight: bold;
             font-size: 10px;
-            line-height: inherit;
             cursor: pointer;
 
             .anticon-close {
               vertical-align: -0.2em;
-              line-height: 1;
-              display: inline-block;
-              color: inherit;
-              font-style: normal;
-              text-align: center;
-              text-transform: none;
-              text-rendering: optimizelegibility;
-              -webkit-font-smoothing: antialiased;
             }
           }
         }
@@ -138,7 +80,6 @@
           max-width: 100%;
           -webkit-margin-start: 7px;
           margin-inline-start: 7px;
-          box-sizing: border-box;
 
           .ant-select-selection-search-input {
             cursor: auto;
@@ -162,7 +103,6 @@
             overflow: visible;
             color: inherit;
             font-size: inherit;
-            box-sizing: border-box;
           }
           .ant-select-selection-search-mirror {
             cursor: text;
@@ -176,7 +116,6 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
             line-height: 24px;
             transition: all 0.3s;
-            box-sizing: border-box;
             --antd-wave-shadow-color: #1890ff;
             --scroll-bar: 0;
           }
@@ -191,15 +130,12 @@
   margin: 0;
   padding: 0;
   color: rgba(0, 0, 0, 0.85);
-  font-variant: tabular-nums;
   line-height: 1.5715;
   list-style: none;
-  font-feature-settings: 'tnum', "tnum";
   position: absolute;
   top: -9999px;
   left: -9999px;
   z-index: 1050;
-  box-sizing: border-box;
   padding: 4px 0;
   overflow: hidden;
   font-size: 14px;
@@ -214,18 +150,13 @@
   }
 
   .ant-select-tree {
-    box-sizing: border-box;
     margin: 0;
     padding: 0;
     color: #000000d9;
     font-size: 14px;
-    font-variant: tabular-nums;
-    line-height: 1.5715;
     list-style: none;
-    font-feature-settings: "tnum";
     position: relative;
     top: 0.2em;
-    line-height: 1;
     white-space: nowrap;
     outline: none;
     cursor: pointer;
@@ -281,14 +212,12 @@
       }
       .ant-select-tree-checkbox {
         top: initial;
-        margin: 4px 8px 0 0;
+        margin: 2px 8px 0 0;
         padding: 0;
         color: rgba(0, 0, 0, 0.85);
         font-size: 14px;
-        font-variant: tabular-nums;
         list-style: none;
         position: relative;
-        line-height: 1;
         white-space: nowrap;
         outline: none;
         cursor: pointer;

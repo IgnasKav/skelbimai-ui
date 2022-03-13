@@ -66,12 +66,12 @@ export default observer(function AdvertisementEditPage() {
                 <div className={css.form}>
                     <CommonInput label="Pavadinimas" name="title" value={advertisement.title}
                                  onChange={handleInputChange}/>
+                    <TreeSelect label="Kategorija" multipleSelect={false} value={advertisement.category} onChange={handleInputChange}/>
                     <div className={css.formRow}>
                         <CommonInput name="city" value={advertisement.city} onChange={handleInputChange}
                                      label="Miestas"/>
                         {/*<SelectInput name="category" value={advertisement.category} label="Kategorija"*/}
                         {/*             onChange={handleInputChange}/>*/}
-                        <TreeSelect label="Kategorija"/>
                         <CommonInput name="price" value={advertisement.price} onChange={handleInputChange} label="Kaina"
                                      type="number"/>
                     </div>

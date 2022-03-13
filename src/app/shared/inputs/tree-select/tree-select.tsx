@@ -1,6 +1,11 @@
+import React, {useEffect, useState} from 'react';
 import { TreeSelect as AntTreeSelect } from 'antd';
-// import 'antd/dist/antd.css';
+import 'antd/dist/antd.css';
 import css from './tree-select.module.scss';
+import {Category} from "../../../models/Category";
+import {useStore} from "../../../stores/store";
+import {observer} from "mobx-react-lite";
+import { NIL as NIL_UUID } from "uuid";
 
 interface TreeNode {
     title: string;
@@ -9,52 +14,48 @@ interface TreeNode {
 }
 
 interface Props {
+    multipleSelect: boolean;
     label: string;
+    value: Category;
+    onChange: (event: any) => void;
 }
 
-export default function TreeSelect({label}: Props) {
+export default observer(
+    function TreeSelect({label, value, onChange, multipleSelect}: Props) {
     const { SHOW_PARENT } = AntTreeSelect;
+    const { categoryStore } = useStore();
+    const { categories } = categoryStore;
+    const [selectedCategories, setSelectedCategories] = useState<string[] | string>([]);
 
-    const treeData: TreeNode[] = [
-        {
-            title: 'Node1',
-            value: '0-0',
-            children: [
-                {
-                    title: 'Child Node1',
-                    value: '0-0-0',
-                },
-            ],
-        },
-        {
-            title: 'antras',
-            value: '0-1',
-            children: [
-                {
-                    title: 'Child Node3',
-                    value: '0-1-0',
-                    children: [
-                        {
-                            title: 'idomu ar iskleis',
-                            value: 'joo'
-                        }
-                    ]
-                },
-                {
-                    title: 'Child Node4',
-                    value: '0-1-1',
-                },
-                {
-                    title: 'Child Node5',
-                    value: '0-1-2',
-                },
-            ],
-        },
-    ];
+    useEffect(() => {
+        const categoryId = value.id;
+        if(categoryId !== NIL_UUID) {
+            setSelectedCategories(multipleSelect ? [categoryId] : categoryId);
+        }
+    }, [value]);
+
+    // console.log(JSON.parse(JSON.stringify(categories)));
+
+
+    const treeData: TreeNode[] = categories.map(category => {
+        return {
+            title: category.name,
+            value: category.id,
+            children: []
+        };
+    });
+
+    const _onChange = (selectedIds: string[] | string) => {
+        setSelectedCategories(selectedIds);
+        const selecetedCategory = findCategory(selectedIds[0]);
+        //onChange({target: {name: 'category', value: selecetedCategory}});
+    }
+
+    const findCategory = (categoryId: string) => categories.find((category) => category.id === categoryId);
 
     const treeProps = {
         treeData,
-        treeCheckable: true,
+        treeCheckable: multipleSelect,
         showCheckedStrategy: SHOW_PARENT,
         treeNodeFilterProp: 'title',
         style: {
@@ -67,7 +68,7 @@ export default function TreeSelect({label}: Props) {
             <div className={css.label}>
                 { label }
             </div>
-            <AntTreeSelect {...treeProps}/>
+            <AntTreeSelect {...treeProps} onChange={_onChange} value={selectedCategories}/>
         </div>
     );
-}
+});
