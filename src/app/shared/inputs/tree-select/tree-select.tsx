@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { TreeSelect as AntTreeSelect } from 'antd';
-import 'antd/dist/antd.css';
 import css from './tree-select.module.scss';
 import {Category} from "../../../models/Category";
 import {useStore} from "../../../stores/store";
@@ -14,48 +13,62 @@ interface TreeNode {
 }
 
 interface Props {
+    name: string,
     multipleSelect: boolean;
     label: string;
-    value: Category;
+    value?: Category;
     onChange: (event: any) => void;
 }
 
 export default observer(
-    function TreeSelect({label, value, onChange, multipleSelect}: Props) {
+    function TreeSelect({name, label, value, onChange, multipleSelect}: Props) {
     const { SHOW_PARENT } = AntTreeSelect;
     const { categoryStore } = useStore();
-    const { categories } = categoryStore;
-    const [selectedCategories, setSelectedCategories] = useState<string[] | string>([]);
+    const { categories, categoriesFlat } = categoryStore;
+    const [selectedCategories, setSelectedCategories] = useState<string[] | string | undefined>(multipleSelect ? [] : undefined);
+    const [treeData, setTreeData] = useState<TreeNode[]>([]);
 
     useEffect(() => {
-        const categoryId = value.id;
-        if(categoryId !== NIL_UUID) {
+        const categoryId = value?.id;
+        if(categoryId && categoryId !== NIL_UUID) {
             setSelectedCategories(multipleSelect ? [categoryId] : categoryId);
         }
-    }, [value]);
+        setTreeData(toTreeData(categories));
+    }, [value, categories]);
 
-    // console.log(JSON.parse(JSON.stringify(categories)));
 
+    const toTreeData= (categories: Category[]): TreeNode[] => {
+        return categories.map(category => {
+            let treeNode: TreeNode = {
+                title: category.name,
+                value: category.id,
+                children: []
+            };
 
-    const treeData: TreeNode[] = categories.map(category => {
-        return {
-            title: category.name,
-            value: category.id,
-            children: []
-        };
-    });
+            if(category.children) {
+                treeNode.children = toTreeData(category.children);
+            }
+
+            return treeNode;
+        });
+    }
 
     const _onChange = (selectedIds: string[] | string) => {
         setSelectedCategories(selectedIds);
-        const selecetedCategory = findCategory(selectedIds[0]);
-        //onChange({target: {name: 'category', value: selecetedCategory}});
+
+        if(typeof selectedIds === 'string') {
+            const selectedCategory = findCategory(selectedIds);
+            onChange({target: {name: name, value: selectedCategory}});
+        }
+
     }
 
-    const findCategory = (categoryId: string) => categories.find((category) => category.id === categoryId);
+    const findCategory = (categoryId: string) => categoriesFlat.find((category) => category.id === categoryId);
 
     const treeProps = {
         treeData,
         treeCheckable: multipleSelect,
+        showSearch: true,
         showCheckedStrategy: SHOW_PARENT,
         treeNodeFilterProp: 'title',
         style: {

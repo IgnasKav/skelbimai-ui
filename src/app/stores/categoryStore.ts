@@ -5,6 +5,7 @@ import {v4 as uuid} from "uuid";
 
 export default class CategoryStore {
     categories: Category[] = [];
+    categoriesFlat: Category[] =[];
     loading = false;
 
     constructor() {
@@ -15,6 +16,7 @@ export default class CategoryStore {
         this.loading = true;
         try {
             this.categories = await agent.Categories.list();
+            this.flattenCategories(this.categories, this.categoriesFlat);
             runInAction(() => {
                 this.loading = false;
             })
@@ -42,5 +44,15 @@ export default class CategoryStore {
                 this.loading = false;
             })
         }
+    }
+
+    flattenCategories = (categories: Category[], res: Category[]): any => {
+         categories.forEach(category => {
+            if(category.children) {
+                this.flattenCategories(category.children, res);
+            }
+
+            res.push(category)
+        });
     }
 }

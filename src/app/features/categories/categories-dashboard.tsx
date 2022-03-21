@@ -25,10 +25,8 @@ export default observer(function CategoriesDashboard() {
         setDialogOpen(false);
     }
 
-    const create = async (categoryName: string) => {
-        let newCategory = new Category();
-        newCategory.name = categoryName;
-        await createCategory(newCategory);
+    const create = async (category: Category) => {
+        await createCategory(category);
         closeEditOrCreateDialog();
     }
 
