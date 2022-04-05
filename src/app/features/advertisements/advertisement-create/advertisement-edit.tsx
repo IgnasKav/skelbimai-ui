@@ -56,8 +56,6 @@ export default observer(function AdvertisementEditPage() {
         )
     }
 
-    console.log(advertisement);
-
     return (
         <div className={css.dashboard}>
             <div className={css.createAdvertisementCard}>

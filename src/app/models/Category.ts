@@ -1,4 +1,4 @@
-import {v4 as uuid} from "uuid";
+import {NIL as NIL_UUID} from "uuid";
 
 export class Category {
     id: string;
@@ -7,8 +7,8 @@ export class Category {
     children?: Category[];
 
     constructor() {
-        this.id = '';
+        this.id = NIL_UUID;
         this.name = '';
-        this.parentId = '00000000-0000-0000-0000-000000000000';
+        this.parentId = NIL_UUID;
     }
 }

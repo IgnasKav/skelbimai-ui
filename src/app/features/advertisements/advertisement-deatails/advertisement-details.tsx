@@ -5,7 +5,7 @@ import {HiOutlineGlobe, HiOutlineDocumentText, HiEye, HiOutlineCog} from "react-
 import {useStore} from "app/stores/store";
 import {IconButton, Menu, MenuItem} from "@material-ui/core";
 import {useNavigate, useParams} from "react-router-dom";
-import {Advertisement} from "app/models/Advertisement";
+import {Advertisement, AdvertisementPermissions} from "app/models/Advertisement";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "app/layout/loadingComponent";
 
@@ -45,7 +45,7 @@ export default observer(function AdvertisementDetails() {
     return (
         <>
             <div className={css.optionButton}>
-                <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>
+                {advertisement.permissions.find(x => x == AdvertisementPermissions.Update) && <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>}
                 <Menu
                     anchorEl={anchorEl}
                     keepMounted
