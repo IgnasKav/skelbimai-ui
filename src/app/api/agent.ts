@@ -1,6 +1,6 @@
 import {User, UserFormValues} from 'app/models/user';
 import axios, {AxiosResponse} from 'axios';
-import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
+import {Advertisement} from "app/models/Advertisement";
 import {Category} from "app/models/Category";
 import {store} from "app/stores/store";
 import {SearchRequest} from "../models/SearchRequest";
@@ -40,8 +40,8 @@ const requests = {
 const Advertisements = {
     list: (searchRequest: SearchRequest) => requests.post<Advertisement[]>('/advertisements/search', searchRequest),
     details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
-    create: (advertisement: AdvertisementEntity) => requests.post('/advertisements', advertisement),
-    edit: (advertisement: AdvertisementEntity) => requests.put(`/advertisements/${advertisement.id}`, advertisement),
+    create: (advertisement: Advertisement) => requests.post('/advertisements', advertisement),
+    edit: (advertisement: Advertisement) => requests.put(`/advertisements/${advertisement.id}`, advertisement),
     delete: (id: string) => requests.del(`/advertisements/${id}`)
 }
 

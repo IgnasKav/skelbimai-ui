@@ -1,5 +1,5 @@
 import {makeAutoObservable, runInAction} from "mobx";
-import {Advertisement, AdvertisementEntity} from "app/models/Advertisement";
+import {Advertisement} from "app/models/Advertisement";
 import agent from "app/api/agent";
 import {v4 as uuid} from "uuid";
 import {SearchRequest} from "../models/SearchRequest";
@@ -55,8 +55,7 @@ export default class AdvertisementStore {
         this.loading = true;
 
         try {
-            const advertisementEntity = new AdvertisementEntity(updatedAdvertisement);
-            await agent.Advertisements.edit(advertisementEntity);
+            await agent.Advertisements.edit(updatedAdvertisement);
             runInAction(() => {
                 this.advertisements = [...this.advertisements.filter(advertisement => advertisement.id !== updatedAdvertisement.id), updatedAdvertisement];
                 this.loading = false;
@@ -74,8 +73,7 @@ export default class AdvertisementStore {
         newAdvertisement.id = uuid();
 
         try {
-            const advertisementEntity = new AdvertisementEntity(newAdvertisement);
-            await agent.Advertisements.create(advertisementEntity);
+            await agent.Advertisements.create(newAdvertisement);
             runInAction(() => {
                 this.advertisements.push(newAdvertisement);
                 this.loading = false;

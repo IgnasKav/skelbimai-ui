@@ -1,20 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import CloseIcon from 'app/shared/icons/close-icon';
 import css from './advertisement-details.module.scss';
-import {HiOutlineGlobe, HiOutlineDocumentText, HiEye, HiOutlineCog} from "react-icons/hi";
+import {HiEye, HiOutlineCog, HiOutlineDocumentText, HiOutlineGlobe} from "react-icons/hi";
 import {useStore} from "app/stores/store";
-import {IconButton, Menu, MenuItem} from "@material-ui/core";
+import {Button, IconButton, Menu, MenuItem} from "@material-ui/core";
 import {useNavigate, useParams} from "react-router-dom";
-import {Advertisement, AdvertisementPermissions} from "app/models/Advertisement";
+import {Advertisement, AdvertisementPermissions, AdvertisementState} from "app/models/Advertisement";
 import {observer} from "mobx-react-lite";
 import LoadingComponent from "app/layout/loadingComponent";
+import {UserRoles} from "../../../models/user";
 
 export default observer(function AdvertisementDetails() {
     let navigate = useNavigate();
-    const {advertisementStore} = useStore();
+    const {advertisementStore, userStore} = useStore();
     const {
         loadAdvertisement
     } = advertisementStore;
+
+    const {user} = userStore;
 
     const {advertisementId} = useParams<{ advertisementId: string }>();
     const [advertisement, setAdvertisement] = useState<Advertisement>(new Advertisement());
@@ -26,6 +29,17 @@ export default observer(function AdvertisementDetails() {
     const deleteAdvertisement = async () => {
         await advertisementStore.deleteAdvertisement(advertisement.id);
         navigate('/advertisementDashboard');
+    }
+
+    const changeAdvertisementState = async () => {
+        const isApproved = advertisement.state === AdvertisementState.Approved;
+        if(isApproved) {
+            advertisement.state = AdvertisementState.New;
+        } else {
+            advertisement.state = AdvertisementState.Approved;
+        }
+
+        await advertisementStore.updateAdvertisement(advertisement);
     }
 
     //material ui
@@ -44,51 +58,60 @@ export default observer(function AdvertisementDetails() {
 
     return (
         <>
-            <div className={css.optionButton}>
-                {advertisement.permissions.find(x => x == AdvertisementPermissions.Update) && <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>}
-                <Menu
-                    anchorEl={anchorEl}
-                    keepMounted
-                    open={Boolean(anchorEl)}
-                    onClose={handleClose}
-                >
-                    <MenuItem onClick={() => {
-                        navigate(`/edit/${advertisement.id}`)
-                    }}>Redaguoti</MenuItem>
-                    <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
-                </Menu>
-            </div>
-            <div className={css.closeIconContainer}>
-                <CloseIcon onClick={() => navigate('/advertisementDashboard')}/>
-            </div>
-            <div className={css.title}>{advertisement.title}</div>
-            <div className={css.info}>
-                <div className={css.group}>
-                    <HiOutlineGlobe/>
-                    <span>{advertisement.city}</span>
+            <div className={css.header}>
+                <div className={css.optionButton}>
+                    {advertisement.permissions.find(x => x == AdvertisementPermissions.Update) && <IconButton onClick={handleClick}><HiOutlineCog/></IconButton>}
+                    <Menu
+                        anchorEl={anchorEl}
+                        keepMounted
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                    >
+                        <MenuItem onClick={() => {
+                            navigate(`/edit/${advertisement.id}`)
+                        }}>Redaguoti</MenuItem>
+                        <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
+                    </Menu>
                 </div>
-                <span className={css.separator}>&bull;</span>
-                <div className={css.group}>
-                    <HiOutlineDocumentText/>
-                    <span>{advertisement.category.name}</span>
+                <div className={css.closeIconContainer}>
+                    <CloseIcon onClick={() => navigate('/advertisementDashboard')}/>
                 </div>
-                <span className={css.separator}>&bull;</span>
-                <div className={css.group}>
-                    <HiEye/>
-                    <span>{advertisement.views}</span>
-                </div>
+                <div className={css.title}>{advertisement.title}</div>
             </div>
-            <div className={css.gallery}>
-                <div className={css.left}></div>
-                <div className={css.right}>
-                    <div></div>
-                    <div className={css.topRight}></div>
-                    <div></div>
-                    <div className={css.bottomRight}></div>
+            <div className={css.body}>
+                <div className={css.info}>
+                    <div className={css.group}>
+                        <HiOutlineGlobe/>
+                        <span>{advertisement.city}</span>
+                    </div>
+                    <span className={css.separator}>&bull;</span>
+                    <div className={css.group}>
+                        <HiOutlineDocumentText/>
+                        <span>{advertisement.category.name}</span>
+                    </div>
+                    <span className={css.separator}>&bull;</span>
+                    <div className={css.group}>
+                        <HiEye/>
+                        <span>{advertisement.views}</span>
+                    </div>
                 </div>
+                <div className={css.gallery}>
+                    <div className={css.left}></div>
+                    <div className={css.right}>
+                        <div></div>
+                        <div className={css.topRight}></div>
+                        <div></div>
+                        <div className={css.bottomRight}></div>
+                    </div>
+                </div>
+                <div className={css.price}>Kaina: {advertisement.price == null ? '--' : advertisement.price} €</div>
+                <div>{advertisement.description}</div>
             </div>
-            <div className={css.price}>Kaina: {advertisement.price == null ? '--' : advertisement.price} €</div>
-            <div>{advertisement.description}</div>
+            <div className={css.footer}>
+                {user?.userRoles.find(role => (role === UserRoles.Support || role === UserRoles.Admin)) &&
+                    <Button variant="outlined" color="primary" onClick={changeAdvertisementState}>{advertisement.state === AdvertisementState.Approved ? 'Atmesti': 'Patvirtinti'}</Button>
+                }
+            </div>
         </>
     )
 })

@@ -20,13 +20,14 @@ export default observer(function AdvertisementEditPage() {
     } = advertisementStore;
 
     const {advertisementId} = useParams<{ advertisementId: string }>();
+    const isNew = !advertisementId;
     const [advertisement, setAdvertisement] = useState<Advertisement>(new Advertisement());
 
     useEffect(() => {
         if (advertisementId) loadAdvertisement(advertisementId).then(response => setAdvertisement(response!));
     }, [advertisementId, loadAdvertisement]);
 
-    const isNew = advertisement.id === '';
+
 
     const handleInputChange = (event: any) => {
         const {name, value} = event.target;

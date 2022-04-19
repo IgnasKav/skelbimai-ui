@@ -8,7 +8,7 @@ export class Advertisement {
     description: string;
     category: Category;
     ownerId: string;
-    state: string;
+    state: AdvertisementState;
     city: string;
     views: number;
     price: number;
@@ -21,7 +21,7 @@ export class Advertisement {
         this.description = '';
         this.category = new Category();
         this.ownerId = NIL_UUID;
-        this.state = '';
+        this.state = AdvertisementState.New;
         this.city = '';
         this.views = 0;
         this.price = 0;
@@ -29,33 +29,15 @@ export class Advertisement {
     }
 }
 
+export enum AdvertisementState {
+    New= "New",
+    Approved = "Approved",
+    Rejected = "Rejected"
+}
+
 export enum AdvertisementPermissions {
     Read= "Read",
     Update= "Update",
     Delete= "Delete",
     ChangeStatus = "ChangeStatus"
-}
-
-export class AdvertisementEntity {
-    id?: string = undefined;
-    title: string = '';
-    description: string = '';
-    categoryId: string = '';
-    ownerId: string = '';
-    city: string = '';
-    price: number = 0;
-    views: number = 0;
-
-    constructor(advertisement?: Advertisement) {
-        if(advertisement) {
-            this.id = advertisement.id;
-            this.title = advertisement.title;
-            this.description = advertisement.description;
-            this.categoryId = advertisement.category.id;
-            this.ownerId = advertisement.ownerId;
-            this.city = advertisement.city;
-            this.price = advertisement.price;
-            this.views = advertisement.views;
-        }
-    }
 }
