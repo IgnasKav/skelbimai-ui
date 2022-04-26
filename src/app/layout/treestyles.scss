@@ -5,6 +5,7 @@
   .ant-select-selector {
     height: 40px!important;
     border: none!important;
+    box-shadow: none!important;
     //border-radius: 5px!important;
     //border: 2px solid #9c9c9c!important;
 
@@ -15,6 +16,22 @@
       height: 40px!important;
     }
   }
+  &.ant-select-multiple {
+    width: 230px!important;
+    max-width: 230px!important;
+
+    .ant-select-selector {
+      .ant-select-selection-overflow {
+        flex-wrap: nowrap!important;
+        overflow: hidden;
+
+        .ant-select-selection-item {
+          line-height: 22px!important;
+        }
+      }
+    }
+  }
+
   &.ant-select-focused {
     border-color: #4343ff!important;
   }

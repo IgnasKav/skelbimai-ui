@@ -1,5 +1,5 @@
 import css from './search-input.module.scss';
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {FcSearch} from "react-icons/fc";
 
 interface Props {
@@ -8,14 +8,20 @@ interface Props {
 
 export default function SearchInput({onChange}: Props) {
     const [isFocused, setFocus] = useState<boolean>(false);
+
     const inputElement = useRef<HTMLInputElement>(null);
 
-    inputElement?.current?.addEventListener('keydown', (event) => {
-        if (event.code === "Enter" || event.code === "NumpadEnter") {
-            event.preventDefault();
-            onChange(inputElement?.current?.value);
+    useEffect(() => {
+        const handleKeyDownEvent = (event: KeyboardEvent) => {
+            if (event.code === "Enter" || event.code === "NumpadEnter") {
+                event.preventDefault();
+                onChange(inputElement?.current?.value);
+            }
         }
-    });
+        inputElement?.current?.addEventListener('keydown', handleKeyDownEvent);
+
+        return () => inputElement?.current?.removeEventListener('keydown', handleKeyDownEvent);
+    }, []);
 
     const focusField = () => {
         if (inputElement?.current) {

@@ -10,6 +10,20 @@
     .title {
         margin: auto 0;
     }
+    .categoryFilterContainer {
+        width: 300px;
+        max-width: 300px;
+
+        .categoryFlat {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            >div:first-child {
+                margin-left: 10px;
+                margin-right: 5px;
+            }
+        }
+    }
     .spacer {
         flex: 1;
     }

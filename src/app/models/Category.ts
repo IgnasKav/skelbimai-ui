@@ -4,6 +4,7 @@ export class Category {
     id: string;
     name: string;
     parentId: string;
+    Parent?: Category;
     children?: Category[];
 
     constructor() {

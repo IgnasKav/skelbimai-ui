@@ -2,25 +2,34 @@ import {makeAutoObservable, runInAction} from "mobx";
 import {Advertisement} from "app/models/Advertisement";
 import agent from "app/api/agent";
 import {v4 as uuid} from "uuid";
-import {SearchRequest} from "../models/SearchRequest";
+import {CategoryFilter, SearchRequest} from "../models/SearchRequest";
 
 export default class AdvertisementStore {
     advertisements: Advertisement[] = [];
     loading = false;
     loadingDetails = false;
-    searchRequest: SearchRequest;
+    searchRequest: SearchRequest ={
+        from: 0,
+        size: 50,
+        query: '',
+        categoryFilters: []
+    };
 
     constructor() {
         makeAutoObservable(this);
-        this.searchRequest = {
-            from: 0,
-            size: 50,
-            query: ""
-        }
     }
 
-    loadAdvertisements = async (searchText: string = '') => {
+    setSearchQuery = (searchText: string) => {
         this.searchRequest.query = searchText;
+        this.loadAdvertisements();
+    }
+
+    setCategoryFilters = (categoryFilters: CategoryFilter[]) => {
+        this.searchRequest.categoryFilters = categoryFilters;
+        this.loadAdvertisements();
+    }
+
+    loadAdvertisements = async () => {
         this.loading = true;
         try {
             this.advertisements = await agent.Advertisements.list(this.searchRequest);

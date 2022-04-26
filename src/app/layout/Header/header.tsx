@@ -1,21 +1,17 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import css from './header.module.scss';
 import {useStore} from "app/stores/store";
 import SearchInput from "app/shared/inputs/search-input/search-input";
 import {Button} from "@material-ui/core";
 import {useNavigate} from "react-router-dom";
+import {Header as MantineHeader, Group} from "@mantine/core";
 
 export default function Header() {
-    const {userStore, advertisementStore, categoryStore} = useStore();
+    const {advertisementStore, categoryStore} = useStore();
     let navigate = useNavigate();
 
     const handleInputChange = (searchText: string) => {
-        advertisementStore.loadAdvertisements(searchText);
-    }
-
-    const logout = async () => {
-        userStore.logout();
-        navigate('/');
+        advertisementStore.setSearchQuery(searchText);
     }
 
     useEffect(() => {
@@ -25,15 +21,14 @@ export default function Header() {
 
     return (
         <>
-            <div className={css.header}>
-                <Button onClick={() => navigate('/advertisementDashboard')}>Skelbimai</Button>
-                <div className={css.spacer}></div>
-                <SearchInput onChange={handleInputChange}/>
-                <div className={css.spacer}></div>
-                <Button onClick={() => navigate('/categoriesDashboard')}>Pridėti kategoriją</Button>
-                <Button onClick={() => navigate('/createAdvertisement')}>Pridėti skelbimą</Button>
-                <Button onClick={() => logout()}>Atsijungti</Button>
-            </div>
+            <MantineHeader height={60}>
+                <Group sx={{ height: '100%' }}>
+                    <Button onClick={() => navigate('/advertisementDashboard')}>Skelbimai</Button>
+                    <div className={css.spacer}></div>
+                    <SearchInput onChange={(searchText) => handleInputChange(searchText)}/>
+                    <div className={css.spacer}></div>
+                </Group>
+            </MantineHeader>
         </>
     )
 }

@@ -11,6 +11,8 @@ import AdvertisementEditPage from "app/features/advertisements/advertisement-cre
 import LoginForm from 'app/features/users/login-form';
 import RegisterForm from 'app/features/users/register/register-form';
 import LoadingComponent from "./loadingComponent";
+import {AppShell} from "@mantine/core";
+import {NavBar} from "./NavBar/nav-bar";
 
 function App() {
     const {commonStore, userStore} = useStore();
@@ -27,17 +29,22 @@ function App() {
 
     return (
         <>
-            {userStore.isLoggedIn && <Header/>}
-            <Routes>
-                <Route path='/categoriesDashboard' element={<CategoriesDashboard/>}/>
-                <Route path="/createAdvertisement" element={<AdvertisementEditPage/>}/>
-                <Route path="/edit/:advertisementId" element={<AdvertisementEditPage/>}/>
-                <Route path='/advertisementDashboard/*' element={<RequireAuth>
-                    <AdvertisementDashboard/>
-                </RequireAuth>}/>
-                <Route path='/login' element={<LoginForm/>}/>
-                <Route path='/register' element={<RegisterForm/>}/>
-            </Routes>
+            <AppShell
+                header={userStore.isLoggedIn ? <Header/> : undefined}
+                navbar={<NavBar/>}
+                fixed
+            >
+                <Routes>
+                    <Route path='/categoriesDashboard' element={<CategoriesDashboard/>}/>
+                    <Route path="/createAdvertisement" element={<AdvertisementEditPage/>}/>
+                    <Route path="/edit/:advertisementId" element={<AdvertisementEditPage/>}/>
+                    <Route path='/advertisementDashboard/*' element={<RequireAuth>
+                        <AdvertisementDashboard/>
+                    </RequireAuth>}/>
+                    <Route path='/login' element={<LoginForm/>}/>
+                    <Route path='/register' element={<RegisterForm/>}/>
+                </Routes>
+            </AppShell>
         </>
     );
 }
