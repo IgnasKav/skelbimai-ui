@@ -1,8 +1,8 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import css from './advertisement-list.module.scss';
 import {useStore} from "app/stores/store";
 import {useNavigate} from "react-router-dom";
-import {Grid, Image, Card, Group, Badge, Text, createStyles} from '@mantine/core';
+import {Card, Group, Badge, Text, createStyles} from '@mantine/core';
 import {Advertisement} from "../../../models/Advertisement";
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -100,7 +100,7 @@ export default function AdvertisementList() {
 
     return (
         <>
-            <div className={classes.grid}>
+            <div id="grid" className={classes.grid}>
                 {advertisements.map(advertisement => (
                     <Card withBorder
                           className={openedAdvertisement?.id === advertisement.id

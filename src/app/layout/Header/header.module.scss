@@ -1,3 +1,12 @@
+$website-logo: "../../../testing-images/website-logo.png";
+
+.webSiteLogo {
+    height: 48px;
+    width: 48px;
+    background-image: url(#{$website-logo});
+    background-size: 100%;
+}
+
 .header {
     display: flex;
     height: 50px;
