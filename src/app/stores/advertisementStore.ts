@@ -8,6 +8,8 @@ export default class AdvertisementStore {
     advertisements: Advertisement[] = [];
     loading = false;
     loadingDetails = false;
+    openedAdvertisement: Advertisement | undefined = undefined;
+
     searchRequest: SearchRequest ={
         from: 0,
         size: 50,
@@ -17,6 +19,10 @@ export default class AdvertisementStore {
 
     constructor() {
         makeAutoObservable(this);
+    }
+
+    setIsDetailsOpen = (openedAdvertisement: Advertisement | undefined) => {
+        this.openedAdvertisement = openedAdvertisement;
     }
 
     setSearchQuery = (searchText: string) => {

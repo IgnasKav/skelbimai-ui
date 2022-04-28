@@ -23,7 +23,10 @@ export default observer(function AdvertisementDetails() {
     const [advertisement, setAdvertisement] = useState<Advertisement>(new Advertisement());
 
     useEffect(() => {
-        if (advertisementId) loadAdvertisement(advertisementId).then(response => setAdvertisement(response!));
+        if (advertisementId) loadAdvertisement(advertisementId).then(response => {
+            setAdvertisement(response!);
+            advertisementStore.setIsDetailsOpen(response!);
+        });
     }, [advertisementId, loadAdvertisement]);
 
     const deleteAdvertisement = async () => {
@@ -42,6 +45,11 @@ export default observer(function AdvertisementDetails() {
         await advertisementStore.updateAdvertisement(advertisement);
     }
 
+    const handleAdvertisementClose = () => {
+        advertisementStore.setIsDetailsOpen(undefined);
+        navigate('/advertisementDashboard')
+    }
+
     //material ui
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -49,7 +57,7 @@ export default observer(function AdvertisementDetails() {
         setAnchorEl(event.currentTarget);
     }
 
-    const handleClose = () => {
+    const handleMenuClose = () => {
         setAnchorEl(null);
     }
     //
@@ -65,7 +73,7 @@ export default observer(function AdvertisementDetails() {
                         anchorEl={anchorEl}
                         keepMounted
                         open={Boolean(anchorEl)}
-                        onClose={handleClose}
+                        onClose={handleMenuClose}
                     >
                         <MenuItem onClick={() => {
                             navigate(`/edit/${advertisement.id}`)
@@ -74,7 +82,7 @@ export default observer(function AdvertisementDetails() {
                     </Menu>
                 </div>
                 <div className={css.closeIconContainer}>
-                    <CloseIcon onClick={() => navigate('/advertisementDashboard')}/>
+                    <CloseIcon onClick={handleAdvertisementClose}/>
                 </div>
                 <div className={css.title}>{advertisement.title}</div>
             </div>

@@ -8,12 +8,13 @@ import {useStore} from "../../stores/store";
 import LoadingComponent from "../../layout/loadingComponent";
 
 export default observer(function AdvertisementDashboard() {
-
     const {advertisementStore} = useStore();
+    const { openedAdvertisement } = advertisementStore;
+
     if (advertisementStore.loading) return <LoadingComponent inverted={true} content="Kraunami skelbimai"/>
 
     return (
-        <div className={css.dashboard}>
+        <div className={!!openedAdvertisement ? [css.dashboard, css.open].join(' ') : css.dashboard}>
             <div className={css.list}>
                 <AdvertisementList/>
             </div>
