@@ -14,7 +14,8 @@ export default class AdvertisementStore {
         from: 0,
         size: 50,
         query: '',
-        categoryFilters: []
+        categoryFilters: [],
+        userId: '',
     };
 
     constructor() {
@@ -32,6 +33,11 @@ export default class AdvertisementStore {
 
     setCategoryFilters = (categoryFilters: CategoryFilter[]) => {
         this.searchRequest.categoryFilters = categoryFilters;
+        this.loadAdvertisements();
+    }
+
+    setUserIdFilter = (userId: string) => {
+        this.searchRequest.userId = userId;
         this.loadAdvertisements();
     }
 

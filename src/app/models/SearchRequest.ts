@@ -3,6 +3,7 @@ export interface SearchRequest {
     size: number;
     query: string;
     categoryFilters?: CategoryFilter[];
+    userId?: string;
 }
 
 export interface CategoryFilter {

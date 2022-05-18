@@ -1,53 +1,75 @@
 import {useStore} from 'app/stores/store'
-import {useFormik} from 'formik'
-import css from './login-form.module.scss'
 import {observer} from 'mobx-react-lite'
 import React, {useState} from 'react'
-import CommonInput from "app/shared/inputs/common-input/common-input-field";
-import * as Yup from 'yup';
 import {UserFormValues} from "app/models/user";
-import {Button, Card} from "@material-ui/core";
-import FormError from "app/shared/inputs/form-error/form-error";
 import {useNavigate} from "react-router-dom";
+import {
+    TextInput,
+    PasswordInput,
+    Checkbox,
+    Anchor,
+    Paper,
+    Title,
+    Text,
+    Container,
+    Group,
+    Button,
+} from '@mantine/core';
+import { useForm } from '@mantine/form';
 
 export default observer(function LoginForm() {
     let navigate = useNavigate();
     const {userStore} = useStore();
     const [formError, setFormError] = useState<string>("");
 
+    const form = useForm({
+        initialValues: {
+            email: '',
+            password: '',
+            rememberMe: false
+        },
+
+        validate: {
+            email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
+        },
+    });
+
     const submit = async (values: UserFormValues) => {
        await userStore.login(values).catch(error => setFormError( 'Invalid email or password'));
        navigate('/advertisementDashboard');
     }
 
-    const formik = useFormik({
-        initialValues: {email: '', password: '', error: null},
-        validationSchema: Yup.object({
-            email: Yup.string().email('Neteisingas el.pašto formatas').required('*'),
-            password: Yup.string().required('*')
-        }),
-        onSubmit: (values) => submit(values)
-    });
-
 
     return (
-        <Card className={css.loginForm}>
-            <h1>Prisijungimas</h1>
-            <form onSubmit={formik.handleSubmit} autoComplete='off'>
-                <CommonInput label="E-mail" name="email" value={formik.values.email} onChange={formik.handleChange}
-                             error={formik.errors.email}/>
-                <CommonInput label="Slaptažodis" name="password" type="password" value={formik.values.password}
-                             onChange={formik.handleChange} error={formik.errors.password}/>
-                <FormError error={formError}/>
-                <div className={css.formButtons}>
-                    <Button variant="outlined" color="secondary" onClick={() => navigate('/register')}>
-                        Registracija
+        <Container size={420} my={40}>
+            <form onSubmit={form.onSubmit((values) => submit(values))} autoComplete='off'>
+                <Title
+                    align="center"
+                    sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+                >
+                    Welcome back!
+                </Title>
+                <Text color="dimmed" size="sm" align="center" mt={5}>
+                    Do not have an account yet?{' '}
+                    <Anchor<'a'> href="#" size="sm" onClick={() => navigate('/register')}>
+                        Create account
+                    </Anchor>
+                </Text>
+
+                <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+                    <TextInput  label="Email" {...form.getInputProps('email')} placeholder="you@email.com" required />
+                    <PasswordInput label="Password" {...form.getInputProps('password')} placeholder="Your password" required mt="md" />
+                    <Group position="apart" mt="md">
+                        <Checkbox label="Remember me"   {...form.getInputProps('rememberMe', { type: 'checkbox' })} />
+                        <Anchor<'a'> onClick={(event) => event.preventDefault()} href="#" size="sm">
+                            Forgot password?
+                        </Anchor>
+                    </Group>
+                    <Button type="submit" fullWidth mt="xl">
+                        Sign in
                     </Button>
-                    <Button variant="outlined" color="primary" type="submit">
-                        Prisijungti
-                    </Button>
-                </div>
+                </Paper>
             </form>
-        </Card>
+        </Container>
     )
 })

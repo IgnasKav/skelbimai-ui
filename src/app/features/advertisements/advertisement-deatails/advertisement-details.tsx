@@ -31,7 +31,7 @@ export default observer(function AdvertisementDetails() {
 
     const deleteAdvertisement = async () => {
         await advertisementStore.deleteAdvertisement(advertisement.id);
-        navigate('/advertisementDashboard');
+        navigate('..');
     }
 
     const changeAdvertisementState = async () => {
@@ -47,7 +47,7 @@ export default observer(function AdvertisementDetails() {
 
     const handleAdvertisementClose = () => {
         advertisementStore.setIsDetailsOpen(undefined);
-        navigate('/advertisementDashboard')
+        navigate('..')
     }
 
     //material ui
