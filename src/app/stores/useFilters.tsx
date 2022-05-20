@@ -9,8 +9,7 @@ interface FilterState {
 
 const initialFilterState: FilterState = {
   searchRequest: {
-    from: 0,
-    size: 50,
+    page: 0,
     query: '',
   },
   setSearchQuery: (searchText: string) => {},
@@ -21,8 +20,7 @@ const FilterContext = createContext<FilterState>(initialFilterState)
 
 export const FilterProvider = ({ children }: { children: JSX.Element }) => {
   const [searchRequest, setSearchRequest] = useState<SearchRequest>({
-    from: 0,
-    size: 50,
+    page: 0,
     query: '',
   })
 

@@ -92,15 +92,16 @@ export default function AdvertisementList({ advertisements }: Props) {
 
   const { advertisementStore } = useStore()
   const { openedAdvertisement } = advertisementStore
-  const imageUrl2 =
-    'https://images.unsplash.com/photo-1586699253884-e199770f63b9?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80'
 
   const handleAdvertisementClick = (advertisement: Advertisement) => {
+    advertisementStore.setIsDetailsOpen(advertisement)
     navigate(`./details/${advertisement.id}`)
   }
 
   if (!advertisements) {
     return <div>No advertisements found</div>
+  } else {
+    console.log(advertisements)
   }
 
   return (
@@ -109,6 +110,7 @@ export default function AdvertisementList({ advertisements }: Props) {
         {advertisements.map((advertisement) => (
           <Card
             withBorder
+            radius="md"
             key={advertisement.id}
             className={
               openedAdvertisement?.id === advertisement.id
@@ -119,7 +121,10 @@ export default function AdvertisementList({ advertisements }: Props) {
           >
             <Card.Section>
               <div className={classes.imageContainer}>
-                <div className={classes.image} style={{ backgroundImage: `url(${imageUrl2})` }}>
+                <div
+                  className={classes.image}
+                  style={{ backgroundImage: `url(${advertisement.imageUrl})` }}
+                >
                   {' '}
                 </div>
               </div>

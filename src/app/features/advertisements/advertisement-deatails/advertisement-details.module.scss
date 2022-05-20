@@ -1,10 +1,7 @@
 .title {
     font-size: 40px;
-    font-family: 'Roboto-Light';
-    margin-top: 15px;
 }
 .info {
-    font-family: 'Roboto-Light';
     display: flex;
     margin-top: 5px;
 
@@ -14,19 +11,16 @@
     .group {
         display: flex;
 
-        svg {
-            font-size: 16px;
-        }
         span {
             margin-left: 2px;
         }
     }
 }
 .gallery {
-    display: grid;
-    grid-template-columns: calc(50% - 5px) calc(50% - 5px);
+    //display: grid;
+    //grid-template-columns: calc(50% - 5px) calc(50% - 5px);
     height: 350px;
-    column-gap: 10px;
+    //column-gap: 10px;
     margin-top: 15px;
 
     .left {
