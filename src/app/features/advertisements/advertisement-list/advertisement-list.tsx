@@ -1,7 +1,7 @@
 import React from 'react'
 import { useStore } from 'app/stores/store'
 import { useNavigate } from 'react-router-dom'
-import { Card, Group, Text, createStyles } from '@mantine/core'
+import { Card, Group, Text, createStyles, Image } from '@mantine/core'
 import { Advertisement } from '../../../models/Advertisement'
 
 const useStyles = createStyles((theme, _params, getRef) => {
@@ -54,7 +54,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
       left: 0,
       right: 0,
       bottom: 0,
-      backgroundSize: 'cover',
       transition: 'transform 500ms ease',
     },
 
@@ -100,8 +99,6 @@ export default function AdvertisementList({ advertisements }: Props) {
 
   if (!advertisements) {
     return <div>No advertisements found</div>
-  } else {
-    console.log(advertisements)
   }
 
   return (
@@ -121,12 +118,7 @@ export default function AdvertisementList({ advertisements }: Props) {
           >
             <Card.Section>
               <div className={classes.imageContainer}>
-                <div
-                  className={classes.image}
-                  style={{ backgroundImage: `url(${advertisement.imageUrl})` }}
-                >
-                  {' '}
-                </div>
+                <Image className={classes.image} src={advertisement.imageUrl} height={180} />
               </div>
             </Card.Section>
             <Card.Section className={classes.section} mt="md">

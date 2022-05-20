@@ -93,7 +93,7 @@ function App() {
               }
             />
             <Route
-              path="/watchLater"
+              path="/watchLater/*"
               element={
                 <RequireAuth>
                   <WatchLater />

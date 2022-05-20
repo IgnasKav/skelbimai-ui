@@ -1,27 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import AdvertisementDashboard from '../advertisement-dashboard'
 import { useStore } from '../../../stores/store'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import agent from '../../../api/agent'
 import { useFilters } from '../../../stores/useFilters'
-import { SearchRequest } from 'app/models/SearchRequest'
 import { useInView } from 'react-intersection-observer'
+import getRandomImage from '../advertisementPictures'
 
 export default function MyAdvertisements() {
   const { userStore } = useStore()
   const { searchRequest } = useFilters()
-  const [localSearchRequest, setLocalSearchRequest] = useState<SearchRequest>(searchRequest)
   const { user } = userStore
   const { ref, inView } = useInView()
 
   useEffect(() => {
-    if (user) {
-      setLocalSearchRequest({ ...searchRequest, userId: user.id })
-    }
     if (inView) {
       fetchNextPage()
     }
-  }, [userStore, searchRequest, inView, setLocalSearchRequest])
+  }, [inView])
 
   const {
     status,
@@ -35,13 +31,21 @@ export default function MyAdvertisements() {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery(
-    ['myAdvertisements', localSearchRequest],
+    ['myAdvertisements', searchRequest],
     async ({ pageParam = 0 }) => {
-      localSearchRequest.page = pageParam
-      const result = await agent.Advertisements.list(localSearchRequest)
-      return { data: result, nextPage: pageParam + 1 }
+      const result = await agent.Advertisements.list({
+        ...searchRequest,
+        userId: user!.id,
+        page: pageParam,
+      })
+      return {
+        data: result.map((a) => {
+          return { ...a, imageUrl: getRandomImage() }
+        }),
+        nextPage: pageParam + 1,
+      }
     },
-    { getNextPageParam: (lastPage, pages) => lastPage.nextPage }
+    { enabled: !!user, getNextPageParam: (lastPage, pages) => lastPage.nextPage }
   )
 
   return (

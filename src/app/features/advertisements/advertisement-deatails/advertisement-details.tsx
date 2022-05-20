@@ -13,8 +13,9 @@ import {
 import { observer } from 'mobx-react-lite'
 import LoadingComponent from 'app/layout/loadingComponent'
 import { UserRoles } from '../../../models/user'
-import { Card, createStyles, Badge, Group, Image, Box } from '@mantine/core'
+import { Card, createStyles, Badge, Group, Image, Box, Text, ActionIcon } from '@mantine/core'
 import { Map2, FileInfo, Eye } from 'tabler-icons-react'
+import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   return {
@@ -28,6 +29,9 @@ const useStyles = createStyles((theme, _params, getRef) => {
       marginTop: '15px',
       borderRadius: theme.radius.md,
       border: '1px solid #e9ecef',
+    },
+    price: {
+      fontSize: '30px',
     },
   }
 })
@@ -69,6 +73,13 @@ export default observer(function AdvertisementDetails() {
   const handleAdvertisementClose = () => {
     advertisementStore.setIsDetailsOpen(undefined)
     navigate('..')
+  }
+
+  //watch later
+  const [watchLater, setWatchLater] = useState(false)
+
+  const handleWatchLater = () => {
+    setWatchLater(!watchLater)
   }
 
   //material ui
@@ -125,9 +136,18 @@ export default observer(function AdvertisementDetails() {
         <Box className={classes.imageBox}>
           <Image height="350px" radius="md" src={openedAdvertisement?.imageUrl} />
         </Box>
-        <div className={css.price}>
-          Kaina: {advertisement.price == null ? '--' : advertisement.price} €
-        </div>
+        <Group mt={15} position="apart">
+          <Text className={classes.price} weight={700} sx={{ lineHeight: 1 }}>
+            €{advertisement.price}
+          </Text>
+          <ActionIcon variant="default" radius="md" size={36} onClick={handleWatchLater}>
+            {watchLater ? (
+              <AiFillHeart color="#ff5656" size={18} />
+            ) : (
+              <AiOutlineHeart color="#ff5656" size={18} />
+            )}
+          </ActionIcon>
+        </Group>
         <div>{advertisement.description}</div>
       </div>
       <div className={css.footer}>
