@@ -8,8 +8,9 @@ import {
   Logout,
   Home,
   FaceId,
-  AddressBook,
+  X,
   Businessplan,
+  Heart,
 } from 'tabler-icons-react'
 import { CategoryFilter } from '../../models/SearchRequest'
 import css from './nav-bar.module.scss'
@@ -154,6 +155,12 @@ export function NavBar() {
           activeLink={active}
         />
         <NavBarLink
+          onClick={(activeLink: string) => onLinkClick('/unapproved', activeLink)}
+          icon={<X />}
+          label="Unapproved"
+          activeLink={active}
+        />
+        <NavBarLink
           onClick={(activeLink: string) => onLinkClick('/categoriesDashboard', activeLink)}
           icon={<FilePlus />}
           label="New category"
@@ -179,7 +186,7 @@ export function NavBar() {
         />
         <NavBarLink
           onClick={(activeLink: string) => onLinkClick('/watchLater', activeLink)}
-          icon={<AddressBook />}
+          icon={<Heart />}
           label="Watch later"
           activeLink={active}
         />

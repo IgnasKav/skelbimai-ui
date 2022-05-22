@@ -16,7 +16,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     card: {
       backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
       width: 260,
-      height: 357,
+      height: 344,
       cursor: 'pointer',
       margin: '0 auto',
 
@@ -55,10 +55,6 @@ const useStyles = createStyles((theme, _params, getRef) => {
       right: 0,
       bottom: 0,
       transition: 'transform 500ms ease',
-    },
-
-    title: {
-      height: 36,
     },
 
     description: {
@@ -106,6 +102,7 @@ export default function AdvertisementList({ advertisements }: Props) {
       <div id="grid" className={classes.grid}>
         {advertisements.map((advertisement) => (
           <Card
+            shadow="md"
             withBorder
             radius="md"
             key={advertisement.id}
@@ -122,10 +119,10 @@ export default function AdvertisementList({ advertisements }: Props) {
               </div>
             </Card.Section>
             <Card.Section className={classes.section} mt="md">
-              <Text size="lg" weight={500} inline className={classes.title}>
+              <Text size="lg" weight={500} lineClamp={1}>
                 {advertisement.title}
               </Text>
-              <Text size="sm" mt="xs" className={classes.description}>
+              <Text size="sm" mt="5px" className={classes.description} color="dimmed" lineClamp={2}>
                 {advertisement.description}
               </Text>
             </Card.Section>

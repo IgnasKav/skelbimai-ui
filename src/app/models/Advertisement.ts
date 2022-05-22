@@ -14,6 +14,7 @@ export class Advertisement {
   price: number
   permissions: string[]
   imageUrl?: string
+  watchLater: boolean
 
   constructor() {
     this.id = NIL_UUID
@@ -27,6 +28,7 @@ export class Advertisement {
     this.views = 0
     this.price = 0
     this.permissions = []
+    this.watchLater = false
   }
 }
 

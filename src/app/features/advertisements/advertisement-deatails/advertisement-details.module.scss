@@ -1,5 +1,6 @@
 .title {
     font-size: 40px;
+    maxWidth: 'calc(100% - 90px)'
 }
 .info {
     display: flex;
@@ -46,11 +47,9 @@
     }
 }
 .closeIconContainer {
-    position: absolute;
+    position: relative;
     display: inline-flex;
     color: #ABABAB;
-    right: 15px;
-    top: 15px;
     font-size: 40px;
 }
 .optionButton {

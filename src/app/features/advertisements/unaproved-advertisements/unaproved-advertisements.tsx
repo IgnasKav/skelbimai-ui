@@ -7,7 +7,7 @@ import { useFilters } from '../../../stores/useFilters'
 import { useInView } from 'react-intersection-observer'
 import getRandomImage from '../advertisementPictures'
 
-export default observer(function WatchLater() {
+export default observer(function UnaprovedAdvertisements() {
   const { searchRequest } = useFilters()
 
   const { ref, inView } = useInView()
@@ -24,20 +24,21 @@ export default observer(function WatchLater() {
     hasNextPage,
     hasPreviousPage,
   } = useInfiniteQuery(
-    ['watchLater', searchRequest],
+    ['unapprovedAdvertisements', searchRequest],
     async ({ pageParam = 0 }) => {
-      const result = await agent.Advertisements.watchLaterList({
+      const result = await agent.Advertisements.list({
         ...searchRequest,
         page: pageParam,
+        onlyUnapproved: true,
       })
       return {
         data: result.map((a) => {
           return { ...a, imageUrl: getRandomImage() }
         }),
-        nextPage: pageParam + 1,
+        nextPage: result.length > 0 ? pageParam + 1 : undefined,
       }
     },
-    { getNextPageParam: (lastPage, pages) => lastPage.nextPage }
+    { getNextPageParam: (lastPage) => lastPage.nextPage }
   )
 
   useEffect(() => {

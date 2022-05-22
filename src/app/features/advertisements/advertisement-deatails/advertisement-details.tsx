@@ -1,9 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import CloseIcon from 'app/shared/icons/close-icon'
 import css from './advertisement-details.module.scss'
-import { HiEye, HiOutlineCog, HiOutlineDocumentText, HiOutlineGlobe } from 'react-icons/hi'
 import { useStore } from 'app/stores/store'
-import { Button, IconButton, Menu, MenuItem } from '@material-ui/core'
 import { useNavigate, useParams } from 'react-router-dom'
 import {
   Advertisement,
@@ -13,14 +10,31 @@ import {
 import { observer } from 'mobx-react-lite'
 import LoadingComponent from 'app/layout/loadingComponent'
 import { UserRoles } from '../../../models/user'
-import { Card, createStyles, Badge, Group, Image, Box, Text, ActionIcon } from '@mantine/core'
-import { Map2, FileInfo, Eye } from 'tabler-icons-react'
+import {
+  Card,
+  createStyles,
+  Badge,
+  Group,
+  Image,
+  Box,
+  Text,
+  ActionIcon,
+  Menu,
+  Title,
+} from '@mantine/core'
+import { Map2, FileInfo, Eye, Settings, X, Edit, Trash, Check } from 'tabler-icons-react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
+import agent from '../../../api/agent'
+import { WatchLater } from '../../../models/WatchLater'
+import { useMutation, useQueryClient } from 'react-query'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   return {
     card: {
       height: '100%',
+      display: 'grid',
+      position: 'relative',
+      gridTemplateRows: '36px calc(100% - 36px)',
     },
     badgeIcon: {
       display: 'flex',
@@ -30,8 +44,32 @@ const useStyles = createStyles((theme, _params, getRef) => {
       borderRadius: theme.radius.md,
       border: '1px solid #e9ecef',
     },
+    body: {
+      display: 'flex',
+      flexDirection: 'column',
+      flex: '1',
+    },
     price: {
       fontSize: '30px',
+    },
+    title: {
+      fontSize: '32px',
+      fontWeight: 500,
+    },
+    currencyBadge: {
+      backgroundColor: theme.colors.gray[1],
+      textAlign: 'center',
+      padding: theme.spacing.xs,
+      borderRadius: theme.radius.md,
+      color: theme.colors.blue[6],
+    },
+    description: {
+      flex: '1',
+      padding: '13px',
+      border: `1px solid ${theme.colors.gray[4]}`,
+      borderRadius: theme.radius.md,
+      overflow: 'scroll',
+      lineBreak: 'anywhere',
     },
   }
 })
@@ -41,6 +79,29 @@ export default observer(function AdvertisementDetails() {
   const { advertisementStore, userStore } = useStore()
   const { loadAdvertisement, openedAdvertisement } = advertisementStore
   const { classes } = useStyles()
+  const queryClient = useQueryClient()
+
+  const advertisementMuttation = useMutation(
+    (updatedAdvertisement: Advertisement) => {
+      return agent.Advertisements.edit(updatedAdvertisement)
+    },
+    {
+      onSettled: (data, variables, context) => {
+        queryClient.invalidateQueries('unapprovedAdvertisements')
+      },
+    }
+  )
+
+  const watchLaterMutation = useMutation(
+    (watchLaterRequest: WatchLater) => {
+      return agent.Advertisements.toggleWatchLater(watchLaterRequest)
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries('watchLater')
+      },
+    }
+  )
 
   const { user } = userStore
 
@@ -67,7 +128,7 @@ export default observer(function AdvertisementDetails() {
       advertisement.state = AdvertisementState.Approved
     }
 
-    await advertisementStore.updateAdvertisement(advertisement)
+    await advertisementMuttation.mutate(advertisement)
   }
 
   const handleAdvertisementClose = () => {
@@ -76,10 +137,15 @@ export default observer(function AdvertisementDetails() {
   }
 
   //watch later
-  const [watchLater, setWatchLater] = useState(false)
+  const handleWatchLater = async () => {
+    if (!user) return
 
-  const handleWatchLater = () => {
-    setWatchLater(!watchLater)
+    const watchLaterRequest: WatchLater = {
+      userId: user.id,
+      advertisementId: advertisement.id,
+    }
+    await watchLaterMutation.mutate(watchLaterRequest)
+    setAdvertisement({ ...advertisement, watchLater: !advertisement.watchLater })
   }
 
   //material ui
@@ -99,63 +165,104 @@ export default observer(function AdvertisementDetails() {
   return (
     <Card withBorder radius="md" className={classes.card}>
       <div className={css.header}>
-        <div className={css.optionButton}>
-          {advertisement.permissions.find((x) => x == AdvertisementPermissions.Update) && (
-            <IconButton onClick={handleClick}>
-              <HiOutlineCog />
-            </IconButton>
-          )}
-          <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}>
-            <MenuItem
-              onClick={() => {
-                navigate(`/edit/${advertisement.id}`)
-              }}
+        <Group position="apart" noWrap>
+          <Group mt={9}>
+            <Badge leftSection={<Map2 size="16" className={classes.badgeIcon} />}>
+              {advertisement.city}
+            </Badge>
+            <Badge
+              color="violet"
+              leftSection={<FileInfo size="16" className={classes.badgeIcon} />}
             >
-              Redaguoti
-            </MenuItem>
-            <MenuItem onClick={() => deleteAdvertisement()}>Ištrinti</MenuItem>
-          </Menu>
-        </div>
-        <div className={css.closeIconContainer}>
-          <CloseIcon onClick={handleAdvertisementClose} />
-        </div>
-        <div className={css.title}>{advertisement.title}</div>
-      </div>
-      <div className={css.body}>
-        <Group mt={9}>
-          <Badge leftSection={<Map2 size="16" className={classes.badgeIcon} />}>
-            {advertisement.city}
-          </Badge>
-          <Badge leftSection={<FileInfo size="16" className={classes.badgeIcon} />}>
-            {advertisement.category.name}
-          </Badge>
-          <Badge leftSection={<Eye size="16" className={classes.badgeIcon} />}>
-            {advertisement.views}
-          </Badge>
+              {advertisement.category.name}
+            </Badge>
+            <Badge color="yellow" leftSection={<Eye size="16" className={classes.badgeIcon} />}>
+              {advertisement.views}
+            </Badge>
+          </Group>
+          <Group spacing="xs" noWrap>
+            <ActionIcon variant="default" radius="md" size={36} onClick={handleWatchLater}>
+              {advertisement.watchLater ? (
+                <AiFillHeart color="#ff5656" size={18} />
+              ) : (
+                <AiOutlineHeart color="#ff5656" size={18} />
+              )}
+            </ActionIcon>
+            {advertisement.permissions.find((x) => x == AdvertisementPermissions.Update) && (
+              <Menu
+                control={
+                  <ActionIcon color="blue" variant="outline" radius="md" size={36}>
+                    <Settings size={25} />
+                  </ActionIcon>
+                }
+              >
+                <Menu.Item
+                  color="primary"
+                  icon={<Edit size={14} />}
+                  onClick={() => {
+                    navigate(`/edit/${advertisement.id}`)
+                  }}
+                >
+                  {' '}
+                  Edit
+                </Menu.Item>
+                {user?.userRoles.find(
+                  (role) => role === UserRoles.Support || role === UserRoles.Admin
+                ) && (
+                  <Menu.Item
+                    color={advertisement.state === AdvertisementState.Approved ? 'red' : 'green'}
+                    icon={
+                      advertisement.state === AdvertisementState.Approved ? (
+                        <X size={14} />
+                      ) : (
+                        <Check size={14} />
+                      )
+                    }
+                    onClick={changeAdvertisementState}
+                  >
+                    {advertisement.state === AdvertisementState.Approved ? 'Unapprove' : 'Approve'}
+                  </Menu.Item>
+                )}
+                <Menu.Item
+                  color="red"
+                  icon={<Trash size={14} />}
+                  onClick={() => deleteAdvertisement()}
+                >
+                  Delete
+                </Menu.Item>
+              </Menu>
+            )}
+            <ActionIcon
+              color="blue"
+              variant="outline"
+              radius="md"
+              size={36}
+              onClick={handleAdvertisementClose}
+            >
+              <X size={25} />
+            </ActionIcon>
+          </Group>
         </Group>
+      </div>
+      <div className={classes.body}>
         <Box className={classes.imageBox}>
           <Image height="350px" radius="md" src={openedAdvertisement?.imageUrl} />
         </Box>
-        <Group mt={15} position="apart">
-          <Text className={classes.price} weight={700} sx={{ lineHeight: 1 }}>
-            €{advertisement.price}
-          </Text>
-          <ActionIcon variant="default" radius="md" size={36} onClick={handleWatchLater}>
-            {watchLater ? (
-              <AiFillHeart color="#ff5656" size={18} />
-            ) : (
-              <AiOutlineHeart color="#ff5656" size={18} />
-            )}
-          </ActionIcon>
+        <Text lineClamp={2} mt={10}>
+          <Title order={1} className={classes.title}>
+            {advertisement.title}
+          </Title>
+        </Text>
+        <Box mt={15} className={classes.description}>
+          <Text color="dimmed">{advertisement.description}</Text>
+        </Box>
+        <Group mt={20}>
+          <Box className={classes.currencyBadge}>
+            <Text className={classes.price} weight={700} sx={{ lineHeight: 1 }}>
+              €{advertisement.price}
+            </Text>
+          </Box>
         </Group>
-        <div>{advertisement.description}</div>
-      </div>
-      <div className={css.footer}>
-        {user?.userRoles.find((role) => role === UserRoles.Support || role === UserRoles.Admin) && (
-          <Button variant="outlined" color="primary" onClick={changeAdvertisementState}>
-            {advertisement.state === AdvertisementState.Approved ? 'Atmesti' : 'Patvirtinti'}
-          </Button>
-        )}
       </div>
     </Card>
   )

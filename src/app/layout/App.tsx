@@ -17,8 +17,15 @@ import { MainWindow } from '../features/advertisements/main-window/main-window'
 import WatchLater from '../features/advertisements/watch-later/watch-later'
 import { QueryClient, QueryClientProvider } from 'react-query'
 import { FilterProvider } from '../stores/useFilters'
+import UnaprovedAdvertisements from '../features/advertisements/unaproved-advertisements/unaproved-advertisements'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 function App() {
   const { commonStore, userStore } = useStore()
@@ -57,6 +64,14 @@ function App() {
               element={
                 <RequireAuth>
                   <CategoriesDashboard />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/unapproved/*"
+              element={
+                <RequireAuth>
+                  <UnaprovedAdvertisements />
                 </RequireAuth>
               }
             />
