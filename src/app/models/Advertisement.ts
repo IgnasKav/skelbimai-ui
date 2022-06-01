@@ -13,7 +13,7 @@ export class Advertisement {
   views: number
   price: number
   permissions: string[]
-  imageUrl?: string
+  imageUrl: string
   watchLater: boolean
 
   constructor() {
@@ -28,6 +28,7 @@ export class Advertisement {
     this.views = 0
     this.price = 0
     this.permissions = []
+    this.imageUrl = ''
     this.watchLater = false
   }
 }

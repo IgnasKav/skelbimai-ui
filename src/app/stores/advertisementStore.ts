@@ -25,10 +25,10 @@ export default class AdvertisementStore {
     this.openedAdvertisement = openedAdvertisement
   }
 
-  setSearchQuery = (searchText: string) => {
-    this.searchRequest.query = searchText
-    this.loadAdvertisements()
-  }
+  // setSearchQuery = (searchText: string) => {
+  //   this.searchRequest.query = searchText
+  //   this.loadAdvertisements()
+  // }
 
   loadAdvertisements = async () => {
     this.loading = true
@@ -61,10 +61,17 @@ export default class AdvertisementStore {
     }
   }
 
-  updateAdvertisement = async (updatedAdvertisement: Advertisement) => {
+  updateAdvertisement = async (updatedAdvertisement: Advertisement, image?: File) => {
     this.loading = true
 
     try {
+      let formData = new FormData()
+      if (image) {
+        formData.append('advertisementId', updatedAdvertisement.id)
+        formData.append('image', new Blob([image]), image.name)
+        await agent.Advertisements.updateImage(formData)
+      }
+
       await agent.Advertisements.edit(updatedAdvertisement)
       runInAction(() => {
         this.advertisements = [

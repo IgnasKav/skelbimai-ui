@@ -26,9 +26,7 @@ export function MainWindow() {
     async ({ pageParam = 0 }) => {
       const result = await agent.Advertisements.list({ ...searchRequest, page: pageParam })
       return {
-        data: result.map((a) => {
-          return { ...a, imageUrl: getRandomImage() }
-        }),
+        data: result,
         nextPage: pageParam + 1,
       }
     },

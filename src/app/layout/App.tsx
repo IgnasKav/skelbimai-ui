@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import './styles.css'
 import './treestyles.scss'
-import Header from './Header/header'
+import { Header } from './Header/header'
 import { observer } from 'mobx-react-lite'
 import { useStore } from 'app/stores/store'
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -42,84 +42,82 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <FilterProvider>
-        <AppShell
-          header={userStore.isLoggedIn ? <Header /> : undefined}
-          navbar={userStore.isLoggedIn ? <NavBar /> : undefined}
-          fixed
-        >
-          <Routes>
-            <Route
-              path="/"
-              element={
-                userStore.isLoggedIn ? (
-                  <Navigate to="/advertisementDashboard" />
-                ) : (
-                  <Navigate to="/login" />
-                )
-              }
-            />
-            <Route
-              path="/categoriesDashboard"
-              element={
-                <RequireAuth>
-                  <CategoriesDashboard />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/unapproved/*"
-              element={
-                <RequireAuth>
-                  <UnaprovedAdvertisements />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/createAdvertisement"
-              element={
-                <RequireAuth>
-                  <AdvertisementEditPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/edit/:advertisementId"
-              element={
-                <RequireAuth>
-                  <AdvertisementEditPage />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/myAdvertisements/*"
-              element={
-                <RequireAuth>
-                  <MyAdvertisements />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/advertisementDashboard/*"
-              element={
-                <RequireAuth>
-                  <MainWindow />
-                </RequireAuth>
-              }
-            />
-            <Route
-              path="/watchLater/*"
-              element={
-                <RequireAuth>
-                  <WatchLater />
-                </RequireAuth>
-              }
-            />
-            <Route path="/login" element={<LoginForm />} />
-            <Route path="/register" element={<RegisterForm />} />
-          </Routes>
-        </AppShell>
-      </FilterProvider>
+      <AppShell
+        header={userStore.isLoggedIn ? <Header /> : undefined}
+        navbar={userStore.isLoggedIn ? <NavBar /> : undefined}
+        fixed
+      >
+        <Routes>
+          <Route
+            path="/"
+            element={
+              userStore.isLoggedIn ? (
+                <Navigate to="/advertisementDashboard" />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+          <Route
+            path="/categoriesDashboard"
+            element={
+              <RequireAuth>
+                <CategoriesDashboard />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/unapproved/*"
+            element={
+              <RequireAuth>
+                <UnaprovedAdvertisements />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/createAdvertisement"
+            element={
+              <RequireAuth>
+                <AdvertisementEditPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/edit/:advertisementId"
+            element={
+              <RequireAuth>
+                <AdvertisementEditPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/myAdvertisements/*"
+            element={
+              <RequireAuth>
+                <MyAdvertisements />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/advertisementDashboard/*"
+            element={
+              <RequireAuth>
+                <MainWindow />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path="/watchLater/*"
+            element={
+              <RequireAuth>
+                <WatchLater />
+              </RequireAuth>
+            }
+          />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/register" element={<RegisterForm />} />
+        </Routes>
+      </AppShell>
     </QueryClientProvider>
   )
 }

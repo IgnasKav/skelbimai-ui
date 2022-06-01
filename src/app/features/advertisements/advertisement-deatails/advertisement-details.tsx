@@ -21,6 +21,7 @@ import {
   ActionIcon,
   Menu,
   Title,
+  Textarea,
 } from '@mantine/core'
 import { Map2, FileInfo, Eye, Settings, X, Edit, Trash, Check } from 'tabler-icons-react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
@@ -63,13 +64,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
       borderRadius: theme.radius.md,
       color: theme.colors.blue[6],
     },
-    description: {
+    descriptionBox: {
       flex: '1',
       padding: '13px',
       border: `1px solid ${theme.colors.gray[4]}`,
       borderRadius: theme.radius.md,
-      overflow: 'scroll',
-      lineBreak: 'anywhere',
+      overflowY: 'auto',
     },
   }
 })
@@ -81,7 +81,7 @@ export default observer(function AdvertisementDetails() {
   const { classes } = useStyles()
   const queryClient = useQueryClient()
 
-  const advertisementMuttation = useMutation(
+  const advertisementMutation = useMutation(
     (updatedAdvertisement: Advertisement) => {
       return agent.Advertisements.edit(updatedAdvertisement)
     },
@@ -111,6 +111,8 @@ export default observer(function AdvertisementDetails() {
   useEffect(() => {
     if (advertisementId)
       loadAdvertisement(advertisementId).then((response) => {
+        console.log(JSON.parse(JSON.stringify(response)))
+        console.log(JSON.parse(JSON.stringify(response!.description.replace(/\n/g, '<br />'))))
         setAdvertisement(response!)
       })
   }, [advertisementId, loadAdvertisement])
@@ -128,7 +130,7 @@ export default observer(function AdvertisementDetails() {
       advertisement.state = AdvertisementState.Approved
     }
 
-    await advertisementMuttation.mutate(advertisement)
+    await advertisementMutation.mutate(advertisement)
   }
 
   const handleAdvertisementClose = () => {
@@ -246,15 +248,17 @@ export default observer(function AdvertisementDetails() {
       </div>
       <div className={classes.body}>
         <Box className={classes.imageBox}>
-          <Image height="350px" radius="md" src={openedAdvertisement?.imageUrl} />
+          <Image height="350px" radius="md" src={openedAdvertisement?.imageUrl} withPlaceholder />
         </Box>
         <Text lineClamp={2} mt={10}>
           <Title order={1} className={classes.title}>
             {advertisement.title}
           </Title>
         </Text>
-        <Box mt={15} className={classes.description}>
-          <Text color="dimmed">{advertisement.description}</Text>
+        <Box mt={15} className={classes.descriptionBox}>
+          {advertisement.description.split(/\n/g).map((line) => (
+            <Text color="dimmed">{line}</Text>
+          ))}
         </Box>
         <Group mt={20}>
           <Box className={classes.currencyBadge}>

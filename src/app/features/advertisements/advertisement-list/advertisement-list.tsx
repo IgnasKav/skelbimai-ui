@@ -115,7 +115,12 @@ export default function AdvertisementList({ advertisements }: Props) {
           >
             <Card.Section>
               <div className={classes.imageContainer}>
-                <Image className={classes.image} src={advertisement.imageUrl} height={180} />
+                <Image
+                  className={classes.image}
+                  src={advertisement.imageUrl}
+                  height={180}
+                  withPlaceholder
+                />
               </div>
             </Card.Section>
             <Card.Section className={classes.section} mt="md">

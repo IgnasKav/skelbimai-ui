@@ -1,10 +1,11 @@
 .ant-tree-select {
   border-radius: 5px!important;
-  border: 2px solid #9c9c9c!important;
+  border: 1px solid #ced4da!important;
 
   .ant-select-selector {
     height: 40px!important;
     border: none!important;
+    background-color: transparent!important;
     box-shadow: none!important;
 
     .ant-select-selection-item {
@@ -31,7 +32,7 @@
   }
 
   &.ant-select-focused {
-    border-color: #4343ff!important;
+    border-color: #339af0!important;
   }
 }
 .ant-select-dropdown {

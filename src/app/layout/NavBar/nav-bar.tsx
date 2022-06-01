@@ -1,22 +1,14 @@
 import React, { useState } from 'react'
-import { Group, Navbar, UnstyledButton, ThemeIcon, Text, createStyles } from '@mantine/core'
+import { Navbar, createStyles } from '@mantine/core'
 import { useStore } from '../../stores/store'
 import { useNavigate } from 'react-router-dom'
-import {
-  FilePlus,
-  SquarePlus,
-  Logout,
-  Home,
-  FaceId,
-  X,
-  Businessplan,
-  Heart,
-} from 'tabler-icons-react'
+import { FilePlus, SquarePlus, Home, X, Businessplan, Heart } from 'tabler-icons-react'
 import { CategoryFilter } from '../../models/SearchRequest'
 import css from './nav-bar.module.scss'
 import { Category } from '../../models/Category'
 import TreeSelect from '../../shared/inputs/tree-select/tree-select'
 import { useFilters } from '../../stores/useFilters'
+import { UserRoles } from '../../models/user'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -89,51 +81,12 @@ function NavBarLink({ icon, label, onClick, activeLink }: NavBarLinkProps) {
   )
 }
 
-interface LogOutLinkProps {
-  icon: React.ReactNode
-  color: string
-  label: string
-  onClick: () => void
-  activeLink: string
-}
-
-function LogOutLink({ icon, color, label, onClick }: LogOutLinkProps) {
-  return (
-    <UnstyledButton
-      onClick={onClick}
-      sx={(theme) => ({
-        display: 'block',
-        width: '100%',
-        padding: theme.spacing.xs,
-        borderRadius: theme.radius.sm,
-        color: theme.black,
-
-        '&:hover': {
-          backgroundColor: theme.colors.gray[0],
-        },
-      })}
-    >
-      <Group>
-        <ThemeIcon color={color} variant="light">
-          {icon}
-        </ThemeIcon>
-
-        <Text size="sm">{label}</Text>
-      </Group>
-    </UnstyledButton>
-  )
-}
-
 export function NavBar() {
   const [active, setActive] = useState<string>('')
   const { userStore } = useStore()
-  const { setCategoryFilters } = useFilters()
+  const { user } = userStore
+  const { setCategoryFilters, setSearchQuery } = useFilters()
   let navigate = useNavigate()
-
-  const logout = async () => {
-    userStore.logout()
-    navigate('/')
-  }
 
   const handleCategoriesFilterChange = (event: any) => {
     const { value }: { value: CategoryFilter[] } = event.target
@@ -141,6 +94,7 @@ export function NavBar() {
   }
 
   const onLinkClick = (url: string, activeLink: string) => {
+    setSearchQuery('xddd')
     navigate(url)
     setActive(activeLink)
   }
@@ -154,28 +108,26 @@ export function NavBar() {
           label="Home"
           activeLink={active}
         />
-        <NavBarLink
-          onClick={(activeLink: string) => onLinkClick('/unapproved', activeLink)}
-          icon={<X />}
-          label="Unapproved"
-          activeLink={active}
-        />
-        <NavBarLink
-          onClick={(activeLink: string) => onLinkClick('/categoriesDashboard', activeLink)}
-          icon={<FilePlus />}
-          label="New category"
-          activeLink={active}
-        />
+        {user?.userRoles.find((role) => role === UserRoles.Support || role === UserRoles.Admin) && (
+          <NavBarLink
+            onClick={(activeLink: string) => onLinkClick('/unapproved', activeLink)}
+            icon={<X />}
+            label="Unapproved"
+            activeLink={active}
+          />
+        )}
+        {user?.userRoles.find((role) => role === UserRoles.Support || role === UserRoles.Admin) && (
+          <NavBarLink
+            onClick={(activeLink: string) => onLinkClick('/categoriesDashboard', activeLink)}
+            icon={<FilePlus />}
+            label="New category"
+            activeLink={active}
+          />
+        )}
         <NavBarLink
           onClick={(activeLink: string) => onLinkClick('/createAdvertisement', activeLink)}
           icon={<SquarePlus />}
           label="New advertisement"
-          activeLink={active}
-        />
-        <NavBarLink
-          onClick={(activeLink: string) => onLinkClick('/advertisementDashboard', activeLink)}
-          icon={<FaceId />}
-          label="User list"
           activeLink={active}
         />
         <NavBarLink
@@ -197,15 +149,6 @@ export function NavBar() {
           multipleSelect={true}
           value={new Category()}
           onChange={handleCategoriesFilterChange}
-        />
-      </Navbar.Section>
-      <Navbar.Section>
-        <LogOutLink
-          onClick={logout}
-          icon={<Logout size={16} />}
-          color="red"
-          label="Log out"
-          activeLink={active}
         />
       </Navbar.Section>
     </Navbar>

@@ -53,6 +53,7 @@ const Advertisements = {
       `/advertisements/${watchLaterReqest.advertisementId}/watchLater`,
       watchLaterReqest
     ),
+  updateImage: (formData: FormData) => requests.post('/advertisements/updateImage', formData),
 }
 
 const Categories = {
@@ -60,11 +61,13 @@ const Categories = {
   create: (category: Category) => requests.post('/categories', category),
   edit: (category: Category) => requests.put(`/categories/${category.id}`, category),
 }
+
 const Account = {
   current: () => requests.get<User>('/account'),
   login: (user: UserFormValues) => requests.post<User>('/account/login', user),
   register: (user: UserFormValues) => requests.post<User>('/account/register', user),
 }
+
 const agent = {
   Advertisements: Advertisements,
   Categories: Categories,

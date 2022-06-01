@@ -1,9 +1,9 @@
-import { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { CategoryFilter, SearchRequest } from '../models/SearchRequest'
 
 interface FilterState {
   searchRequest: SearchRequest
-  setSearchQuery: (userId: string) => void
+  setSearchQuery: (searchText: string) => void
   setCategoryFilters: (categoryFilters: CategoryFilter[]) => void
 }
 
@@ -11,6 +11,7 @@ const initialFilterState: FilterState = {
   searchRequest: {
     page: 0,
     query: '',
+    categoryFilters: [],
   },
   setSearchQuery: (searchText: string) => {},
   setCategoryFilters: (categoryFilters: CategoryFilter[]) => {},
@@ -22,20 +23,25 @@ export const FilterProvider = ({ children }: { children: JSX.Element }) => {
   const [searchRequest, setSearchRequest] = useState<SearchRequest>({
     page: 0,
     query: '',
+    categoryFilters: [],
   })
 
-  const setSearchQuery = (searchText: string) => {
-    setSearchRequest({ ...searchRequest, query: searchText })
+  const setCategoryFilters = (categoryFilters: CategoryFilter[]) => {
+    console.log('set filters')
+    console.log(JSON.parse(JSON.stringify(searchRequest)))
+    setSearchRequest({ ...searchRequest, categoryFilters: categoryFilters })
   }
 
-  const setCategoryFilters = (categoryFilters: CategoryFilter[]) => {
-    setSearchRequest({ ...searchRequest, categoryFilters: categoryFilters })
+  const setSearchQuery = (searchText: string) => {
+    console.log('set query')
+    console.log(JSON.parse(JSON.stringify(searchRequest)))
+    setSearchRequest({ ...searchRequest, query: searchText })
   }
 
   const value = {
     searchRequest,
-    setSearchQuery,
     setCategoryFilters,
+    setSearchQuery,
   }
 
   return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>

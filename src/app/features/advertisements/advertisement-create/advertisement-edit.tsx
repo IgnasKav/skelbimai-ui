@@ -1,18 +1,36 @@
-import React, { useEffect, useState } from 'react'
+import React, { createRef, useEffect, useRef, useState } from 'react'
 import css from './advertisement-edit.module.scss'
-import CommonInput from 'app/shared/inputs/common-input/common-input-field'
-import { Button } from '@material-ui/core'
 import { useStore } from 'app/stores/store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Advertisement } from 'app/models/Advertisement'
-import { HiOutlineDocumentText, HiOutlineGlobe } from 'react-icons/hi'
 import { observer } from 'mobx-react-lite'
 import LoadingComponent from 'app/layout/loadingComponent'
 import TreeSelect from 'app/shared/inputs/tree-select/tree-select'
-import { createStyles } from '@mantine/core'
+import {
+  Button,
+  Badge,
+  Box,
+  Card,
+  createStyles,
+  Group,
+  Image,
+  NumberInput,
+  Text,
+  TextInput,
+  Title,
+  Textarea,
+  MantineTheme,
+  useMantineTheme,
+} from '@mantine/core'
+import { Dropzone, DropzoneStatus } from '@mantine/dropzone'
+import { Eye, FileInfo, Icon as TablerIcon, Map2, Photo, Upload, X } from 'tabler-icons-react'
+import { useForm } from '@mantine/form'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   return {
+    categoryInput: {
+      marginTop: '20px',
+    },
     card: {
       height: '100%',
       display: 'grid',
@@ -51,39 +69,123 @@ const useStyles = createStyles((theme, _params, getRef) => {
       padding: '13px',
       border: `1px solid ${theme.colors.gray[4]}`,
       borderRadius: theme.radius.md,
-      overflow: 'scroll',
-      lineBreak: 'anywhere',
+      overflowY: 'auto',
+    },
+    wrapper: {
+      position: 'relative',
+      marginBottom: 30,
+    },
+
+    dropzone: {
+      borderWidth: 1,
+      paddingBottom: 50,
+    },
+
+    icon: {
+      color: theme.colorScheme === 'dark' ? theme.colors.dark[3] : theme.colors.gray[4],
     },
   }
 })
 
-export default observer(function AdvertisementEditPage() {
+function getIconColor(status: DropzoneStatus, theme: MantineTheme) {
+  return status.accepted
+    ? theme.colors[theme.primaryColor][6]
+    : status.rejected
+    ? theme.colors.red[6]
+    : theme.colorScheme === 'dark'
+    ? theme.colors.dark[0]
+    : theme.colors.gray[7]
+}
+
+function ImageUploadIcon({
+  status,
+  ...props
+}: React.ComponentProps<TablerIcon> & { status: DropzoneStatus }) {
+  if (status.accepted) {
+    return <Upload {...props} />
+  }
+
+  if (status.rejected) {
+    return <X {...props} />
+  }
+
+  return <Photo {...props} />
+}
+
+export const dropzoneChildren = (status: DropzoneStatus, theme: MantineTheme) => (
+  <Group position="center" spacing="xl" style={{ minHeight: 220, pointerEvents: 'none' }}>
+    <ImageUploadIcon status={status} style={{ color: getIconColor(status, theme) }} size={80} />
+
+    <div>
+      <Text size="xl" inline>
+        Drag images here or click to select files
+      </Text>
+      <Text size="sm" color="dimmed" inline mt={7}>
+        Attach as many files as you like, each file should not exceed 5mb
+      </Text>
+    </div>
+  </Group>
+)
+
+export default function AdvertisementEditPage() {
   const { classes } = useStyles()
   let navigate = useNavigate()
+  const theme = useMantineTheme()
   const { advertisementStore } = useStore()
   const { createAdvertisement, updateAdvertisement, loadAdvertisement } = advertisementStore
 
   const { advertisementId } = useParams<{ advertisementId: string }>()
   const isNew = !advertisementId
   const [advertisement, setAdvertisement] = useState<Advertisement>(new Advertisement())
+  const [image, setImage] = useState<File>()
 
   useEffect(() => {
     if (advertisementId)
-      loadAdvertisement(advertisementId).then((response) => setAdvertisement(response!))
+      loadAdvertisement(advertisementId).then((response) => {
+        setAdvertisement(response!)
+      })
   }, [advertisementId, loadAdvertisement])
 
-  const handleInputChange = (event: any) => {
-    const { name, value } = event.target
-    setAdvertisement({ ...advertisement, [name]: value })
+  const form = useForm({
+    initialValues: {
+      title: advertisement.title,
+      category: advertisement.category,
+      city: advertisement.city,
+      price: advertisement.price,
+      description: advertisement.description,
+    },
+  })
+
+  const submit = () => {
+    createOrEditAdvertisement()
+  }
+
+  const handleInputChange = (fieldName: string, event: any) => {
+    const { value } = event.target
+    // @ts-ignore
+    form.setFieldValue(fieldName, value)
+    setAdvertisement({ ...advertisement, [fieldName]: value })
+  }
+
+  const handleNumberInputChange = (fieldName: string, value: number | undefined) => {
+    // @ts-ignore
+    form.setFieldValue(fieldName, value)
+    setAdvertisement({ ...advertisement, [fieldName]: value })
   }
 
   const createOrEditAdvertisement = async () => {
     if (isNew) {
       await createAdvertisement(advertisement)
     } else {
-      await updateAdvertisement(advertisement)
+      await updateAdvertisement(advertisement, image)
     }
     navigate('/advertisementDashboard')
+  }
+
+  const onDrop = (files: File[]) => {
+    const imagePreview = URL.createObjectURL(files[0])
+    setImage(files[0])
+    setAdvertisement({ ...advertisement, imageUrl: imagePreview })
   }
 
   //loading
@@ -102,86 +204,118 @@ export default observer(function AdvertisementEditPage() {
 
   return (
     <div className={css.dashboard}>
-      <div className={css.createAdvertisementCard}>
-        <div className={css.title}>{isNew ? 'Skelbimo pridėjimas' : 'Skelbimo redagavimas'}</div>
+      <form className={css.createAdvertisementCard} onSubmit={form.onSubmit(() => submit())}>
+        <div className={css.title}>{isNew ? 'New product' : 'Edit product'}</div>
         <div className={css.form}>
-          <CommonInput
-            label="Pavadinimas"
-            name="title"
+          <TextInput
+            label="Title"
+            {...form.getInputProps('title')}
+            placeholder="Title"
             value={advertisement.title}
-            onChange={handleInputChange}
+            required
+            onChange={(event) => handleInputChange('title', event)}
           />
           <TreeSelect
             name="category"
             label="Kategorija"
+            className={classes.categoryInput}
             multipleSelect={false}
             value={advertisement.category}
-            onChange={handleInputChange}
+            onChange={(event) => handleInputChange('category', event)}
           />
-          <div className={css.formRow}>
-            <CommonInput
-              name="city"
+          <Group mt={20} grow>
+            <TextInput
+              label="City"
+              {...form.getInputProps('city')}
+              placeholder="City"
               value={advertisement.city}
-              onChange={handleInputChange}
-              label="Miestas"
+              onChange={(event) => handleInputChange('city', event)}
+              required
             />
-            <CommonInput
-              name="price"
+            <NumberInput
+              label="Price"
+              {...form.getInputProps('price')}
               value={advertisement.price}
-              onChange={handleInputChange}
-              label="Kaina"
-              type="number"
+              onChange={(price) => handleNumberInputChange('price', price)}
+              placeholder="Price"
+              hideControls
+              required
             />
-          </div>
-          <CommonInput
-            name="description"
+          </Group>
+          <Textarea
+            mt={20}
+            label="Description"
+            {...form.getInputProps('description')}
             value={advertisement.description}
-            onChange={handleInputChange}
-            className={css.description}
-            label="Aprašymas"
-            type="textarea"
+            minRows={4}
+            maxRows={6}
+            onChange={(event) => handleInputChange('description', event)}
           />
+          <Dropzone
+            mt={20}
+            onDrop={(files) => onDrop(files)}
+            onReject={(files) => console.log('rejected files', files)}
+          >
+            {(status) => dropzoneChildren(status, theme)}
+          </Dropzone>
         </div>
         <div className={css.buttonGroup}>
           <Button
-            variant="outlined"
+            variant="outline"
             color="secondary"
             onClick={() => navigate('/advertisementDashboard')}
           >
             Atšaukti
           </Button>
-          <Button variant="outlined" color="primary" onClick={() => createOrEditAdvertisement()}>
+          <Button variant="outline" color="primary" type="submit">
             {isNew ? 'Sukurti' : 'Išsaugoti'}
           </Button>
         </div>
-      </div>
+      </form>
       <div className={css.preview}>
-        <div className={css.title}>{advertisement.title}</div>
-        <div className={css.info}>
-          <div className={css.group}>
-            <HiOutlineGlobe />
-            <span>{advertisement.city}</span>
+        <Card withBorder radius="md" shadow="md" className={classes.card}>
+          <div className={css.header}>
+            <Group position="apart" noWrap>
+              <Group mt={9}>
+                <Badge leftSection={<Map2 size="16" className={classes.badgeIcon} />}>
+                  {advertisement.city}
+                </Badge>
+                <Badge
+                  color="violet"
+                  leftSection={<FileInfo size="16" className={classes.badgeIcon} />}
+                >
+                  {advertisement.category.name}
+                </Badge>
+                <Badge color="yellow" leftSection={<Eye size="16" className={classes.badgeIcon} />}>
+                  {advertisement.views}
+                </Badge>
+              </Group>
+            </Group>
           </div>
-          <span className={css.separator}>&bull;</span>
-          <div className={css.group}>
-            <HiOutlineDocumentText />
-            <span>{advertisement.category.name}</span>
+          <div className={classes.body}>
+            <Box className={classes.imageBox}>
+              <Image height="350px" radius="md" src={advertisement.imageUrl} />
+            </Box>
+            <Text lineClamp={2} mt={10}>
+              <Title order={1} className={classes.title}>
+                {advertisement.title}
+              </Title>
+            </Text>
+            <Box mt={15} className={classes.description}>
+              {advertisement.description.split(/\n/g).map((line) => (
+                <Text color="dimmed">{line}</Text>
+              ))}
+            </Box>
+            <Group mt={20}>
+              <Box className={classes.currencyBadge}>
+                <Text className={classes.price} weight={700} sx={{ lineHeight: 1 }}>
+                  €{advertisement.price}
+                </Text>
+              </Box>
+            </Group>
           </div>
-        </div>
-        <div className={css.gallery}>
-          <div className={css.left}></div>
-          <div className={css.right}>
-            <div></div>
-            <div className={css.topRight}></div>
-            <div></div>
-            <div className={css.bottomRight}></div>
-          </div>
-        </div>
-        <div className={css.price}>
-          Kaina: {advertisement.price == null ? '--' : advertisement.price} €
-        </div>
-        <div>{advertisement.description}</div>
+        </Card>
       </div>
     </div>
   )
-})
+}
