@@ -3,7 +3,6 @@ import AdvertisementDashboard from '../advertisement-dashboard'
 import { useFilters } from '../../../stores/useFilters'
 import { useInfiniteQuery } from 'react-query'
 import agent from '../../../api/agent'
-import getRandomImage from '../advertisementPictures'
 import { useInView } from 'react-intersection-observer'
 
 export function MainWindow() {

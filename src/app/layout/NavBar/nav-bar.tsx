@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Navbar, createStyles } from '@mantine/core'
-import { useStore } from '../../stores/store'
 import { useNavigate } from 'react-router-dom'
 import { FilePlus, SquarePlus, Home, X, Businessplan, Heart } from 'tabler-icons-react'
 import { CategoryFilter } from '../../models/SearchRequest'
@@ -9,6 +8,7 @@ import { Category } from '../../models/Category'
 import TreeSelect from '../../shared/inputs/tree-select/tree-select'
 import { useFilters } from '../../stores/useFilters'
 import { UserRoles } from '../../models/user'
+import { useAuth } from '../../stores/useAuth'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   const icon = getRef('icon')
@@ -83,8 +83,7 @@ function NavBarLink({ icon, label, onClick, activeLink }: NavBarLinkProps) {
 
 export function NavBar() {
   const [active, setActive] = useState<string>('')
-  const { userStore } = useStore()
-  const { user } = userStore
+  const auth = useAuth()
   const { setCategoryFilters, setSearchQuery } = useFilters()
   let navigate = useNavigate()
 
@@ -94,7 +93,6 @@ export function NavBar() {
   }
 
   const onLinkClick = (url: string, activeLink: string) => {
-    setSearchQuery('xddd')
     navigate(url)
     setActive(activeLink)
   }
@@ -108,7 +106,9 @@ export function NavBar() {
           label="Home"
           activeLink={active}
         />
-        {user?.userRoles.find((role) => role === UserRoles.Support || role === UserRoles.Admin) && (
+        {auth.user?.userRoles.find(
+          (role) => role === UserRoles.Support || role === UserRoles.Admin
+        ) && (
           <NavBarLink
             onClick={(activeLink: string) => onLinkClick('/unapproved', activeLink)}
             icon={<X />}
@@ -116,7 +116,9 @@ export function NavBar() {
             activeLink={active}
           />
         )}
-        {user?.userRoles.find((role) => role === UserRoles.Support || role === UserRoles.Admin) && (
+        {auth.user?.userRoles.find(
+          (role) => role === UserRoles.Support || role === UserRoles.Admin
+        ) && (
           <NavBarLink
             onClick={(activeLink: string) => onLinkClick('/categoriesDashboard', activeLink)}
             icon={<FilePlus />}

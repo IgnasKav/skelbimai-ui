@@ -7,8 +7,8 @@ import { useStore } from 'app/stores/store'
 import { Navigate, Route, Routes } from 'react-router-dom'
 import CategoriesDashboard from 'app/features/categories/categories-dashboard'
 import AdvertisementEditPage from 'app/features/advertisements/advertisement-create/advertisement-edit'
-import LoginForm from 'app/features/users/login-form'
-import RegisterForm from 'app/features/users/register/register-form'
+import LoginForm from 'app/features/auth/login-form'
+import RegisterForm from 'app/features/auth/register/register-form'
 import LoadingComponent from './loadingComponent'
 import { AppShell } from '@mantine/core'
 import { NavBar } from './NavBar/nav-bar'
@@ -16,8 +16,9 @@ import MyAdvertisements from '../features/advertisements/my-advertisements/my-ad
 import { MainWindow } from '../features/advertisements/main-window/main-window'
 import WatchLater from '../features/advertisements/watch-later/watch-later'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import { FilterProvider } from '../stores/useFilters'
 import UnaprovedAdvertisements from '../features/advertisements/unaproved-advertisements/unaproved-advertisements'
+import Settings from 'app/features/settings/settings'
+import { useAuth } from '../stores/useAuth'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,34 +29,31 @@ const queryClient = new QueryClient({
 })
 
 function App() {
-  const { commonStore, userStore } = useStore()
+  const { commonStore } = useStore()
+  const auth = useAuth()
 
   useEffect(() => {
     if (commonStore.token) {
-      userStore.getUser().finally(() => commonStore.setAppLoaded())
+      auth.getUser().finally(() => commonStore.setAppLoaded())
     } else {
       commonStore.setAppLoaded()
     }
-  }, [commonStore, userStore])
+  }, [commonStore, auth])
 
   if (!commonStore.appLoaded) return <LoadingComponent content="Loading app" />
 
   return (
     <QueryClientProvider client={queryClient}>
       <AppShell
-        header={userStore.isLoggedIn ? <Header /> : undefined}
-        navbar={userStore.isLoggedIn ? <NavBar /> : undefined}
+        header={auth.user ? <Header /> : undefined}
+        navbar={auth.user ? <NavBar /> : undefined}
         fixed
       >
         <Routes>
           <Route
             path="/"
             element={
-              userStore.isLoggedIn ? (
-                <Navigate to="/advertisementDashboard" />
-              ) : (
-                <Navigate to="/login" />
-              )
+              auth.user ? <Navigate to="/advertisementDashboard" /> : <Navigate to="/login" />
             }
           />
           <Route
@@ -114,6 +112,14 @@ function App() {
               </RequireAuth>
             }
           />
+          <Route
+            path="/settings/*"
+            element={
+              <RequireAuth>
+                <Settings />
+              </RequireAuth>
+            }
+          />
           <Route path="/login" element={<LoginForm />} />
           <Route path="/register" element={<RegisterForm />} />
         </Routes>
@@ -123,9 +129,9 @@ function App() {
 }
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  const { userStore } = useStore()
+  const auth = useAuth()
 
-  if (!userStore.isLoggedIn) {
+  if (!auth.user) {
     return <Navigate to={'/login'} />
   }
   return children

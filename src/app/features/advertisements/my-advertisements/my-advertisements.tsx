@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react'
 import AdvertisementDashboard from '../advertisement-dashboard'
-import { useStore } from '../../../stores/store'
 import { useInfiniteQuery } from 'react-query'
 import agent from '../../../api/agent'
 import { useFilters } from '../../../stores/useFilters'
 import { useInView } from 'react-intersection-observer'
-import getRandomImage from '../advertisementPictures'
+import { useAuth } from '../../../stores/useAuth'
 
 export default function MyAdvertisements() {
-  const { userStore } = useStore()
+  const auth = useAuth()
   const { searchRequest } = useFilters()
-  const { user } = userStore
   const { ref, inView } = useInView()
 
   useEffect(() => {
@@ -35,17 +33,15 @@ export default function MyAdvertisements() {
     async ({ pageParam = 0 }) => {
       const result = await agent.Advertisements.list({
         ...searchRequest,
-        userId: user!.id,
+        userId: auth.user!.id,
         page: pageParam,
       })
       return {
-        data: result.map((a) => {
-          return { ...a, imageUrl: getRandomImage() }
-        }),
+        data: result,
         nextPage: pageParam + 1,
       }
     },
-    { enabled: !!user, getNextPageParam: (lastPage, pages) => lastPage.nextPage }
+    { enabled: !!auth.user, getNextPageParam: (lastPage, pages) => lastPage.nextPage }
   )
 
   return (

@@ -27,14 +27,10 @@ export const FilterProvider = ({ children }: { children: JSX.Element }) => {
   })
 
   const setCategoryFilters = (categoryFilters: CategoryFilter[]) => {
-    console.log('set filters')
-    console.log(JSON.parse(JSON.stringify(searchRequest)))
     setSearchRequest({ ...searchRequest, categoryFilters: categoryFilters })
   }
 
   const setSearchQuery = (searchText: string) => {
-    console.log('set query')
-    console.log(JSON.parse(JSON.stringify(searchRequest)))
     setSearchRequest({ ...searchRequest, query: searchText })
   }
 

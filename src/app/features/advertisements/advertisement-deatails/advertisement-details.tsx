@@ -21,13 +21,13 @@ import {
   ActionIcon,
   Menu,
   Title,
-  Textarea,
 } from '@mantine/core'
 import { Map2, FileInfo, Eye, Settings, X, Edit, Trash, Check } from 'tabler-icons-react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import agent from '../../../api/agent'
 import { WatchLater } from '../../../models/WatchLater'
 import { useMutation, useQueryClient } from 'react-query'
+import { useAuth } from '../../../stores/useAuth'
 
 const useStyles = createStyles((theme, _params, getRef) => {
   return {
@@ -70,13 +70,15 @@ const useStyles = createStyles((theme, _params, getRef) => {
       border: `1px solid ${theme.colors.gray[4]}`,
       borderRadius: theme.radius.md,
       overflowY: 'auto',
+      wordBreak: 'break-word',
     },
   }
 })
 
 export default observer(function AdvertisementDetails() {
   let navigate = useNavigate()
-  const { advertisementStore, userStore } = useStore()
+  const { advertisementStore } = useStore()
+  const auth = useAuth()
   const { loadAdvertisement, openedAdvertisement } = advertisementStore
   const { classes } = useStyles()
   const queryClient = useQueryClient()
@@ -103,7 +105,18 @@ export default observer(function AdvertisementDetails() {
     }
   )
 
-  const { user } = userStore
+  const deleteMutation = useMutation(
+    (advertisementId: string) => {
+      return agent.Advertisements.delete(advertisementId)
+    },
+    {
+      onSuccess: (data, variables, context) => {
+        queryClient.invalidateQueries('myAdvertisements')
+        queryClient.invalidateQueries('mainAdvertisements')
+        queryClient.invalidateQueries('watchLater')
+      },
+    }
+  )
 
   const { advertisementId } = useParams<{ advertisementId: string }>()
   const [advertisement, setAdvertisement] = useState<Advertisement>(new Advertisement())
@@ -111,14 +124,12 @@ export default observer(function AdvertisementDetails() {
   useEffect(() => {
     if (advertisementId)
       loadAdvertisement(advertisementId).then((response) => {
-        console.log(JSON.parse(JSON.stringify(response)))
-        console.log(JSON.parse(JSON.stringify(response!.description.replace(/\n/g, '<br />'))))
         setAdvertisement(response!)
       })
   }, [advertisementId, loadAdvertisement])
 
   const deleteAdvertisement = async () => {
-    await advertisementStore.deleteAdvertisement(advertisement.id)
+    await deleteMutation.mutate(advertisement.id)
     navigate('..')
   }
 
@@ -140,27 +151,15 @@ export default observer(function AdvertisementDetails() {
 
   //watch later
   const handleWatchLater = async () => {
-    if (!user) return
+    if (!auth.user) return
 
     const watchLaterRequest: WatchLater = {
-      userId: user.id,
+      userId: auth.user.id,
       advertisementId: advertisement.id,
     }
     await watchLaterMutation.mutate(watchLaterRequest)
     setAdvertisement({ ...advertisement, watchLater: !advertisement.watchLater })
   }
-
-  //material ui
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setAnchorEl(null)
-  }
-  //
 
   if (advertisementStore.loadingDetails) return <LoadingComponent content="Kraunamas skelbimas" />
 
@@ -208,7 +207,7 @@ export default observer(function AdvertisementDetails() {
                   {' '}
                   Edit
                 </Menu.Item>
-                {user?.userRoles.find(
+                {auth.user?.userRoles.find(
                   (role) => role === UserRoles.Support || role === UserRoles.Admin
                 ) && (
                   <Menu.Item

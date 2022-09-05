@@ -5,7 +5,6 @@ import { useInfiniteQuery, useQuery } from 'react-query'
 import { observer } from 'mobx-react-lite'
 import { useFilters } from '../../../stores/useFilters'
 import { useInView } from 'react-intersection-observer'
-import getRandomImage from '../advertisementPictures'
 
 export default observer(function WatchLater() {
   const { searchRequest } = useFilters()
@@ -31,9 +30,7 @@ export default observer(function WatchLater() {
         page: pageParam,
       })
       return {
-        data: result.map((a) => {
-          return { ...a, imageUrl: getRandomImage() }
-        }),
+        data: result,
         nextPage: pageParam + 1,
       }
     },

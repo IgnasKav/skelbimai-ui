@@ -1,9 +1,8 @@
-import React, { createRef, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import css from './advertisement-edit.module.scss'
 import { useStore } from 'app/stores/store'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Advertisement } from 'app/models/Advertisement'
-import { observer } from 'mobx-react-lite'
 import LoadingComponent from 'app/layout/loadingComponent'
 import TreeSelect from 'app/shared/inputs/tree-select/tree-select'
 import {
@@ -175,7 +174,7 @@ export default function AdvertisementEditPage() {
 
   const createOrEditAdvertisement = async () => {
     if (isNew) {
-      await createAdvertisement(advertisement)
+      await createAdvertisement(advertisement, image)
     } else {
       await updateAdvertisement(advertisement, image)
     }
@@ -294,7 +293,7 @@ export default function AdvertisementEditPage() {
           </div>
           <div className={classes.body}>
             <Box className={classes.imageBox}>
-              <Image height="350px" radius="md" src={advertisement.imageUrl} />
+              <Image height="350px" radius="md" src={advertisement.imageUrl} withPlaceholder />
             </Box>
             <Text lineClamp={2} mt={10}>
               <Title order={1} className={classes.title}>

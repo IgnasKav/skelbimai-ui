@@ -90,11 +90,18 @@ export default class AdvertisementStore {
     }
   }
 
-  createAdvertisement = async (newAdvertisement: Advertisement) => {
+  createAdvertisement = async (newAdvertisement: Advertisement, image?: File) => {
     this.loading = true
     newAdvertisement.id = uuid()
 
     try {
+      let formData = new FormData()
+      if (image) {
+        formData.append('advertisementId', newAdvertisement.id)
+        formData.append('image', new Blob([image]), image.name)
+        await agent.Advertisements.updateImage(formData)
+      }
+
       await agent.Advertisements.create(newAdvertisement)
       runInAction(() => {
         this.advertisements.push(newAdvertisement)

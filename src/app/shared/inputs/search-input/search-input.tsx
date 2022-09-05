@@ -1,5 +1,5 @@
 import css from './search-input.module.scss'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { Input } from '@mantine/core'
 import { Search } from 'tabler-icons-react'
 
@@ -8,9 +8,6 @@ interface Props {
 }
 
 export default function SearchInput({ onChange }: Props) {
-  const [searchValue, setSearchValue] = useState<string>('')
-  const [isFocused, setFocus] = useState<boolean>(false)
-
   const inputElement = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
