@@ -38,7 +38,7 @@ function App() {
     } else {
       commonStore.setAppLoaded()
     }
-  }, [commonStore, auth])
+  }, [commonStore, auth.getUser])
 
   if (!commonStore.appLoaded) return <LoadingComponent content="Loading app" />
 
