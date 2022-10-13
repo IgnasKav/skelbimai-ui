@@ -34,11 +34,13 @@ function App() {
 
   useEffect(() => {
     if (commonStore.token) {
-      auth.getUser().finally(() => commonStore.setAppLoaded())
+      auth.getUser().finally(() => {
+        commonStore.setAppLoaded()
+      })
     } else {
       commonStore.setAppLoaded()
     }
-  }, [commonStore, auth.getUser])
+  }, [commonStore.token])
 
   if (!commonStore.appLoaded) return <LoadingComponent content="Loading app" />
 

@@ -32,7 +32,7 @@ export default function Settings() {
             <TextInput
               label="Display name"
               {...form.getInputProps('displayName')}
-              placeholder="you@email.com"
+              placeholder="Display name"
               required
             />
             <TextInput
