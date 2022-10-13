@@ -2,7 +2,7 @@ import { makeAutoObservable, runInAction } from 'mobx'
 import { Advertisement } from 'app/models/Advertisement'
 import agent from 'app/api/agent'
 import { v4 as uuid } from 'uuid'
-import { CategoryFilter, SearchRequest } from '../models/SearchRequest'
+import { SearchRequest } from '../models/SearchRequest'
 
 export default class AdvertisementStore {
   advertisements: Advertisement[] = []

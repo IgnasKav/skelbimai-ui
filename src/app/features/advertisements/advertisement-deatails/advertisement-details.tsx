@@ -11,18 +11,18 @@ import { observer } from 'mobx-react-lite'
 import LoadingComponent from 'app/layout/loadingComponent'
 import { UserRoles } from '../../../models/user'
 import {
+  ActionIcon,
+  Badge,
+  Box,
   Card,
   createStyles,
-  Badge,
   Group,
   Image,
-  Box,
-  Text,
-  ActionIcon,
   Menu,
+  Text,
   Title,
 } from '@mantine/core'
-import { Map2, FileInfo, Eye, Settings, X, Edit, Trash, Check } from 'tabler-icons-react'
+import { Check, Edit, Eye, FileInfo, Map2, Settings, Trash, X } from 'tabler-icons-react'
 import { AiFillHeart, AiOutlineHeart } from 'react-icons/ai'
 import agent from '../../../api/agent'
 import { WatchLater } from '../../../models/WatchLater'

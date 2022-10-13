@@ -3,13 +3,13 @@ import { UserFormValues } from 'app/models/user'
 import { useNavigate } from 'react-router-dom'
 import {
   Anchor,
+  Button,
   Container,
   Paper,
   PasswordInput,
   Text,
   TextInput,
   Title,
-  Button,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useAuth } from '../../../stores/useAuth'

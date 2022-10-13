@@ -1,14 +1,5 @@
 import React from 'react'
-import {
-  Anchor,
-  Button,
-  Center,
-  Checkbox,
-  Group,
-  Paper,
-  PasswordInput,
-  TextInput,
-} from '@mantine/core'
+import { Center, Paper, PasswordInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
 
 export default function Settings() {

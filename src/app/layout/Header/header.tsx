@@ -2,14 +2,14 @@ import React, { useEffect } from 'react'
 import css from './header.module.scss'
 import { useStore } from 'app/stores/store'
 import {
-  Header as MantineHeader,
-  Group,
-  Menu,
   Avatar,
+  createStyles,
+  Group,
+  Header as MantineHeader,
+  Input,
+  Menu,
   Text,
   UnstyledButton,
-  createStyles,
-  Input,
 } from '@mantine/core'
 import { useFilters } from '../../stores/useFilters'
 import { ChevronDown, Logout, Search, Settings } from 'tabler-icons-react'

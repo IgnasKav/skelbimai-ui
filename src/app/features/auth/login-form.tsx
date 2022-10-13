@@ -2,16 +2,16 @@ import React, { useState } from 'react'
 import { UserFormValues } from 'app/models/user'
 import { useNavigate } from 'react-router-dom'
 import {
-  TextInput,
-  PasswordInput,
-  Checkbox,
   Anchor,
-  Paper,
-  Title,
-  Text,
+  Button,
+  Checkbox,
   Container,
   Group,
-  Button,
+  Paper,
+  PasswordInput,
+  Text,
+  TextInput,
+  Title,
 } from '@mantine/core'
 import { useForm } from '@mantine/form'
 import { useAuth } from '../../stores/useAuth'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useStore } from 'app/stores/store'
 import { useNavigate } from 'react-router-dom'
-import { Card, Group, Text, createStyles, Image } from '@mantine/core'
+import { Card, createStyles, Group, Image, Text } from '@mantine/core'
 import { Advertisement } from '../../../models/Advertisement'
 import LoadingComponent from '../../../layout/loadingComponent'
 

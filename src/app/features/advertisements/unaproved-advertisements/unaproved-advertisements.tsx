@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import AdvertisementDashboard from '../advertisement-dashboard'
 import agent from 'app/api/agent'
-import { useInfiniteQuery, useQuery } from 'react-query'
+import { useInfiniteQuery } from 'react-query'
 import { observer } from 'mobx-react-lite'
 import { useFilters } from '../../../stores/useFilters'
 import { useInView } from 'react-intersection-observer'

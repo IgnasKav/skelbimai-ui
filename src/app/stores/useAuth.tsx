@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState } from 'react'
 import { User, UserFormValues } from '../models/user'
 import agent from '../api/agent'
 import { store } from './store'
-import { runInAction } from 'mobx'
 
 interface AuthState {
   user: User | null
