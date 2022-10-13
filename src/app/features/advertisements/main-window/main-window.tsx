@@ -9,18 +9,7 @@ export function MainWindow() {
   const { searchRequest } = useFilters()
   const { ref, inView } = useInView()
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['mainAdvertisements', searchRequest],
     async ({ pageParam = 0 }) => {
       const result = await agent.Advertisements.list({ ...searchRequest, page: pageParam })
@@ -29,7 +18,7 @@ export function MainWindow() {
         nextPage: pageParam + 1,
       }
     },
-    { getNextPageParam: (lastPage, pages) => lastPage.nextPage }
+    { getNextPageParam: (lastPage) => lastPage.nextPage }
   )
 
   useEffect(() => {

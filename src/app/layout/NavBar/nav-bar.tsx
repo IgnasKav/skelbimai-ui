@@ -84,7 +84,7 @@ function NavBarLink({ icon, label, onClick, activeLink }: NavBarLinkProps) {
 export function NavBar() {
   const [active, setActive] = useState<string>('')
   const auth = useAuth()
-  const { setCategoryFilters, setSearchQuery } = useFilters()
+  const { setCategoryFilters } = useFilters()
   let navigate = useNavigate()
 
   const handleCategoriesFilterChange = (event: any) => {

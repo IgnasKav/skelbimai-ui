@@ -11,18 +11,7 @@ export default observer(function WatchLater() {
 
   const { ref, inView } = useInView()
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['watchLater', searchRequest],
     async ({ pageParam = 0 }) => {
       const result = await agent.Advertisements.watchLaterList({
@@ -34,7 +23,7 @@ export default observer(function WatchLater() {
         nextPage: pageParam + 1,
       }
     },
-    { getNextPageParam: (lastPage, pages) => lastPage.nextPage }
+    { getNextPageParam: (lastPage) => lastPage.nextPage }
   )
 
   useEffect(() => {

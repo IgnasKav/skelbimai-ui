@@ -29,7 +29,7 @@ import { WatchLater } from '../../../models/WatchLater'
 import { useMutation, useQueryClient } from 'react-query'
 import { useAuth } from '../../../stores/useAuth'
 
-const useStyles = createStyles((theme, _params, getRef) => {
+const useStyles = createStyles((theme, _params) => {
   return {
     card: {
       height: '100%',
@@ -88,7 +88,7 @@ export default observer(function AdvertisementDetails() {
       return agent.Advertisements.edit(updatedAdvertisement)
     },
     {
-      onSettled: (data, variables, context) => {
+      onSettled: () => {
         queryClient.invalidateQueries('unapprovedAdvertisements')
       },
     }
@@ -99,7 +99,7 @@ export default observer(function AdvertisementDetails() {
       return agent.Advertisements.toggleWatchLater(watchLaterRequest)
     },
     {
-      onSuccess: (data, variables, context) => {
+      onSuccess: () => {
         queryClient.invalidateQueries('watchLater')
       },
     }
@@ -110,7 +110,7 @@ export default observer(function AdvertisementDetails() {
       return agent.Advertisements.delete(advertisementId)
     },
     {
-      onSuccess: (data, variables, context) => {
+      onSuccess: () => {
         queryClient.invalidateQueries('myAdvertisements')
         queryClient.invalidateQueries('mainAdvertisements')
         queryClient.invalidateQueries('watchLater')
@@ -189,7 +189,7 @@ export default observer(function AdvertisementDetails() {
                 <AiOutlineHeart color="#ff5656" size={18} />
               )}
             </ActionIcon>
-            {advertisement.permissions.find((x) => x == AdvertisementPermissions.Update) && (
+            {advertisement.permissions.find((x) => x === AdvertisementPermissions.Update) && (
               <Menu
                 control={
                   <ActionIcon color="blue" variant="outline" radius="md" size={36}>

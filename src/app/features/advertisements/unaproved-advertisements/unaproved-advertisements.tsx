@@ -11,18 +11,7 @@ export default observer(function UnaprovedAdvertisements() {
 
   const { ref, inView } = useInView()
 
-  const {
-    status,
-    data,
-    error,
-    isFetching,
-    isFetchingNextPage,
-    isFetchingPreviousPage,
-    fetchNextPage,
-    fetchPreviousPage,
-    hasNextPage,
-    hasPreviousPage,
-  } = useInfiniteQuery(
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery(
     ['unapprovedAdvertisements', searchRequest],
     async ({ pageParam = 0 }) => {
       const result = await agent.Advertisements.list({
