@@ -16,9 +16,10 @@ import MyAdvertisements from '../features/advertisements/my-advertisements/my-ad
 import { MainWindow } from '../features/advertisements/main-window/main-window'
 import WatchLater from '../features/advertisements/watch-later/watch-later'
 import { QueryClient, QueryClientProvider } from 'react-query'
-import UnaprovedAdvertisements from '../features/advertisements/unaproved-advertisements/unaproved-advertisements'
+import UnprovedAdvertisements from '../features/advertisements/unaproved-advertisements/unaproved-advertisements'
 import Settings from 'app/features/settings/settings'
 import { useAuth } from '../stores/useAuth'
+import BackgroundJobs from '../features/background-jobs/background-jobs'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -70,7 +71,7 @@ function App() {
             path="/unapproved/*"
             element={
               <RequireAuth>
-                <UnaprovedAdvertisements />
+                <UnprovedAdvertisements />
               </RequireAuth>
             }
           />
@@ -115,6 +116,14 @@ function App() {
             }
           />
           <Route
+            path="/backgroundJobs/*"
+            element={
+              <RequireAuth>
+                <BackgroundJobs />
+              </RequireAuth>
+            }
+          />
+          <Route
             path="/settings/*"
             element={
               <RequireAuth>
@@ -134,6 +143,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   const auth = useAuth()
 
   if (!auth.user) {
+    auth.logout()
     return <Navigate to={'/login'} />
   }
   return children

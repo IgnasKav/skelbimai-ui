@@ -45,3 +45,9 @@ export enum AdvertisementPermissions {
   Delete = 'Delete',
   ChangeStatus = 'ChangeStatus',
 }
+
+export enum AdvertisementBackgroundJob {
+  Delete,
+  Create,
+  Reindex,
+}

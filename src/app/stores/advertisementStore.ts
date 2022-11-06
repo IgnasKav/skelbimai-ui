@@ -10,39 +10,12 @@ export default class AdvertisementStore {
   loadingDetails = false
   openedAdvertisement: Advertisement | undefined = undefined
 
-  searchRequest: SearchRequest = {
-    page: 0,
-    query: '',
-    categoryFilters: [],
-    userId: '',
-  }
-
   constructor() {
     makeAutoObservable(this)
   }
 
   setIsDetailsOpen = (openedAdvertisement: Advertisement | undefined) => {
     this.openedAdvertisement = openedAdvertisement
-  }
-
-  // setSearchQuery = (searchText: string) => {
-  //   this.searchRequest.query = searchText
-  //   this.loadAdvertisements()
-  // }
-
-  loadAdvertisements = async () => {
-    this.loading = true
-    try {
-      this.advertisements = await agent.Advertisements.list(this.searchRequest)
-      runInAction(() => {
-        this.loading = false
-      })
-    } catch (error) {
-      console.log(error)
-      runInAction(() => {
-        this.loading = false
-      })
-    }
   }
 
   loadAdvertisement = async (id: string) => {
@@ -105,25 +78,6 @@ export default class AdvertisementStore {
       await agent.Advertisements.create(newAdvertisement)
       runInAction(() => {
         this.advertisements.push(newAdvertisement)
-        this.loading = false
-      })
-    } catch (error) {
-      console.log(error)
-      runInAction(() => {
-        this.loading = false
-      })
-    }
-  }
-
-  deleteAdvertisement = async (id: string) => {
-    this.loading = true
-
-    try {
-      await agent.Advertisements.delete(id)
-      runInAction(() => {
-        this.advertisements = [
-          ...this.advertisements.filter((advertisement) => advertisement.id !== id),
-        ]
         this.loading = false
       })
     } catch (error) {

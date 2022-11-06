@@ -1,6 +1,6 @@
 import { User, UserFormValues } from 'app/models/user'
 import axios, { AxiosResponse } from 'axios'
-import { Advertisement } from 'app/models/Advertisement'
+import { Advertisement, AdvertisementBackgroundJob } from 'app/models/Advertisement'
 import { Category } from 'app/models/Category'
 import { store } from 'app/stores/store'
 import { SearchRequest } from '../models/SearchRequest'
@@ -12,7 +12,9 @@ import { WatchLater } from '../models/WatchLater'
 //     });
 // }
 
-axios.defaults.baseURL = 'http://localhost:5000/api'
+const ApiUrl = 'http://skelbimai-api.localhost'
+
+axios.defaults.baseURL = `${ApiUrl}/api`
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token
@@ -39,8 +41,16 @@ const requests = {
 }
 
 const Advertisements = {
-  list: (searchRequest: SearchRequest) =>
-    requests.post<Advertisement[]>('/advertisements/search', searchRequest),
+  list: async (searchRequest: SearchRequest) => {
+    const promise = requests.post<Advertisement[]>('/advertisements/search', searchRequest)
+
+    const advertisements = await promise
+    for (let advertisement of advertisements) {
+      advertisement.imageUrl = `${ApiUrl}/${advertisement.imageUrl}`
+    }
+
+    return promise
+  },
   details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
   create: (advertisement: Advertisement) => requests.post('/advertisements', advertisement),
   edit: (advertisement: Advertisement) =>
@@ -68,10 +78,15 @@ const Account = {
   register: (user: UserFormValues) => requests.post<User>('/account/register', user),
 }
 
+const BackgroundJobs = {
+  job: (job: AdvertisementBackgroundJob) => requests.post('/backgroundjobs', { operation: job }),
+}
+
 const agent = {
   Advertisements: Advertisements,
   Categories: Categories,
   Account: Account,
+  BackgroundJobs: BackgroundJobs,
 }
 
 export default agent

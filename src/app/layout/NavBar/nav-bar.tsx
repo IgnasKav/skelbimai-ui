@@ -144,6 +144,16 @@ export function NavBar() {
           label="Watch later"
           activeLink={active}
         />
+        {auth.user?.userRoles.find(
+          (role) => role === UserRoles.Support || role === UserRoles.Admin
+        ) && (
+          <NavBarLink
+            onClick={(activeLink: string) => onLinkClick('/backgroundJobs', activeLink)}
+            icon={<FilePlus />}
+            label="Background jobs"
+            activeLink={active}
+          />
+        )}
         <TreeSelect
           className={css.categoryFilter}
           name="category"
