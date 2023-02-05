@@ -12,9 +12,9 @@ import { WatchLater } from '../models/WatchLater'
 //     });
 // }
 
-const ApiUrl = 'http://skelbimai-api.localhost'
+const ApiUrl = process.env.REACT_APP_API_URL;
 
-axios.defaults.baseURL = `${ApiUrl}/api`
+axios.defaults.baseURL = `${ApiUrl}`
 
 axios.interceptors.request.use((config) => {
   const token = store.commonStore.token
@@ -42,28 +42,40 @@ const requests = {
 
 const Advertisements = {
   list: async (searchRequest: SearchRequest) => {
-    const promise = requests.post<Advertisement[]>('/advertisements/search', searchRequest)
-
-    const advertisements = await promise
-    for (let advertisement of advertisements) {
-      advertisement.imageUrl = `${ApiUrl}/${advertisement.imageUrl}`
-    }
-
-    return promise
+    const promise = await requests.post<Advertisement[]>('/advertisements/search', searchRequest)
+    return mapAdvertisements(promise);
   },
-  details: (id: string) => requests.get<Advertisement>(`/advertisements/${id}`),
+  details: async (id: string) => {
+    const promise = await requests.get<Advertisement>(`/advertisements/${id}`);
+    return mapAdvertisement(promise)
+  },
   create: (advertisement: Advertisement) => requests.post('/advertisements', advertisement),
   edit: (advertisement: Advertisement) =>
     requests.put(`/advertisements/${advertisement.id}`, advertisement),
   delete: (id: string) => requests.del(`/advertisements/${id}`),
-  watchLaterList: (searchRequest: SearchRequest) =>
-    requests.post<any[]>('/advertisements/watchLater', searchRequest),
+  watchLaterList: async (searchRequest: SearchRequest) => {
+    const promise = await requests.post<Advertisement[]>('/advertisements/watchLater', searchRequest);
+    return mapAdvertisements(promise);
+  },
   toggleWatchLater: (watchLaterReqest: WatchLater) =>
     requests.put(
       `/advertisements/${watchLaterReqest.advertisementId}/watchLater`,
       watchLaterReqest
     ),
   updateImage: (formData: FormData) => requests.post('/advertisements/updateImage', formData),
+}
+
+const mapAdvertisement = (advertisement: Advertisement): Advertisement => {
+  advertisement.imageUrl = `${ApiUrl}${advertisement.imageUrl}`;
+  return advertisement; 
+}
+
+const mapAdvertisements = (advertisements: Advertisement[]): Advertisement[] => {
+  for (let advertisement of advertisements) {
+    advertisement.imageUrl = `${ApiUrl}${advertisement.imageUrl}`
+  }
+
+  return advertisements; 
 }
 
 const Categories = {

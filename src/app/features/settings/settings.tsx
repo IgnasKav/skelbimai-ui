@@ -1,12 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Center, Paper, PasswordInput, TextInput } from '@mantine/core'
 import { useForm } from '@mantine/form'
+import { useAuth } from '../../stores/useAuth'
 
 export default function Settings() {
+  const { user } = useAuth()
   const form = useForm({
     initialValues: {
-      displayName: '',
-      email: '',
+      displayName: user?.displayName,
+      email: user?.username ?? '',
       password: '',
     },
 
@@ -14,6 +16,10 @@ export default function Settings() {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : 'Invalid email'),
     },
   })
+
+  useEffect(() => {
+    console.log(user)
+  }, [])
 
   return (
     <>
@@ -37,7 +43,6 @@ export default function Settings() {
               {...form.getInputProps('password')}
               placeholder="Your password"
               required
-              mt="md"
             />
           </Paper>
         </form>

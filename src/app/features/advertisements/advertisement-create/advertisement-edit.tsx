@@ -293,7 +293,7 @@ export default function AdvertisementEditPage() {
           </div>
           <div className={classes.body}>
             <Box className={classes.imageBox}>
-              <Image height="350px" radius="md" src={advertisement.imageUrl} withPlaceholder />
+              <Image height="350px" radius="md" src={advertisement?.imageUrl} withPlaceholder/>
             </Box>
             <Text lineClamp={2} mt={10}>
               <Title order={1} className={classes.title}>
