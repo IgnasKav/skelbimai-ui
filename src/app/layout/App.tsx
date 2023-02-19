@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import './styles.css';
 import './treestyles.scss';
 import { observer } from 'mobx-react-lite';
