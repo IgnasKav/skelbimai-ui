@@ -27,7 +27,7 @@ import {
 import { useForm } from '@mantine/form';
 import css from './advertisement-edit.module.scss';
 
-const useStyles = createStyles((theme, _params, getRef) => ({
+const useStyles = createStyles((theme) => ({
     categoryInput: {
         marginTop: '20px',
     },

@@ -14,7 +14,7 @@ import Settings from 'app/features/settings/settings';
 import LoadingComponent from './loadingComponent';
 import { NavBar } from './NavBar/nav-bar';
 import MyAdvertisements from '../features/advertisements/my-advertisements/my-advertisements';
-import { MainWindow } from '../features/advertisements/main-window/main-window';
+import MainWindow from '../features/advertisements/main-window/main-window';
 import WatchLater from '../features/advertisements/watch-later/watch-later';
 import UnprovedAdvertisements from '../features/advertisements/unaproved-advertisements/unaproved-advertisements';
 import { Header } from './Header/header';

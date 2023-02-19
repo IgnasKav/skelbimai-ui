@@ -31,7 +31,7 @@ import { UserRoles } from '../../../models/user';
 import css from './advertisement-details.module.scss';
 import { useAuth } from '../../../stores/useAuth';
 
-const useStyles = createStyles((theme, _params) => ({
+const useStyles = createStyles((theme) => ({
     card: {
         height: '100%',
         display: 'grid',
@@ -199,8 +199,7 @@ export default observer(() => {
                                         navigate(`/edit/${advertisement.id}`);
                                     }}
                                 >
-                                    {' '}
-                  Edit
+                                    {' '}Edit
                                 </Menu.Item>
                                 {auth.user?.userRoles.find(
                                     (role) => role === UserRoles.Support || role === UserRoles.Admin,
@@ -224,7 +223,7 @@ export default observer(() => {
                                     icon={<Trash size={14} />}
                                     onClick={() => deleteAdvertisement()}
                                 >
-                  Delete
+                                    Delete
                                 </Menu.Item>
                             </Menu>
                         )}
@@ -257,7 +256,7 @@ export default observer(() => {
                 <Group mt={20}>
                     <Box className={classes.currencyBadge}>
                         <Text className={classes.price} weight={700} sx={{ lineHeight: 1 }}>
-              €{advertisement.price}
+                            €{advertisement.price}
                         </Text>
                     </Box>
                 </Group>
