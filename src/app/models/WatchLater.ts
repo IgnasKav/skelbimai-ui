@@ -1,4 +1,4 @@
 export interface WatchLater {
-  userId: string
-  advertisementId: string
+    userId: string
+    advertisementId: string
 }
